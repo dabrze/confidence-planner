@@ -1,0 +1,116 @@
+* {
+  font-family: "Times New Roman", Times, serif;
+  overflow: hidden;
+}
+
+.website_background {
+  background: rgb(255,255,255);
+  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,245,245,1) 100%);
+  display: block;
+}
+
+.navbar {
+  height: 5%;
+  width: 100%;
+}
+
+.nav_entry {
+  color: white;
+}
+
+.nav_entry:hover {
+  color: white;
+  background-color: #3586ae;
+}
+
+.sidebar_on {
+  position: fixed;
+  top: 9%;
+  left: 0;
+  bottom: 0;
+  width: 16rem;
+  height: 91%;
+  z-index: 2;
+  overflow: hidden;
+  transition: all 0.5s;
+  background: #31708f;
+  background: linear-gradient(180deg, rgba(49,112,143,1) 0%, rgba(42,100,128,1) 100%);;
+}
+
+.sidebar_off {
+  position: fixed;
+  top: 9%;
+  left: -16rem;
+  bottom: 0;
+  width: 4rem;
+  height: 91%;
+  z-index: 2;
+  overflow: hidden;
+  transition: all 0.5s;
+  background: #31708f;
+  background: linear-gradient(180deg, rgba(49,112,143,1) 0%, rgba(42,100,128,1) 100%);;
+}
+
+.content_on {
+  transition: margin-left .5s;
+  position: static;
+  margin-left: 17rem;
+  left: 16rem;
+  background: #f8f9fb;
+  z-index: -1;
+}
+
+.content_off {
+  transition: margin-left .5s;
+  position: static;
+  margin-left: 0;
+  left: 0;
+  background: #f8f9fb;
+  z-index: -1;
+}
+
+.plot_plot {
+  background rgb(239,239,239);
+}
+
+.plot_page {
+  width: 100%;
+  outline: thin lightgrey solid;
+}
+
+.plot_card {
+  width: 45%;
+  float:left;
+  display: inline;
+  border-radius: 0px;
+  box-shadow: 0px 0px 10px #000000;
+  margin: 15px;
+}
+
+/* Regarding Test Pages: */
+
+.left_pane {
+  background-color: #8fc1e2;
+  border-radius: 20px;
+  border-style: solid;
+  border-width: 2px;
+  /* box-shadow: 0px 0px 10px #000000; */
+  margin: 5px
+}
+
+.left_pane_content {
+  margin: 4px;
+}
+
+.right_pane {
+  background-color: #8dd2f7;
+  border-radius: 20px;
+  border-style: solid;
+  border-width: 2px;
+  /* box-shadow: 0px 0px 10px #000000; */
+  margin: 5px
+}
+
+.right_pane_content {
+  margin: 4px;
+}
