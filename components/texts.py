@@ -35,3 +35,11 @@ z_test_text = '''This test assumes that data is normally distributed and works w
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
     for 90%, 95%, 98% and 99% confidences.'''
+
+z_test_text_reverse_samples = '''Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
+    or acc-lower_bound (diff) and confidence (conf).
+    Returns rounded number of samples which should be taken to obtain a given confidence interval.'''
+
+z_test_text_reverse_confidence = '''Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
+    or acc-lower_bound (diff) and number of samples (n).
+    Returns confidence rounded to two decimal places.'''
