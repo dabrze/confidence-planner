@@ -4,41 +4,7 @@ import dash_html_components as html
 import dash_core_components as dcc
 import dash_bootstrap_components as dbc
 from dash.dependencies import Input, Output, State
-import os
-import io
-import base64
-import pandas as pd
-import pathlib
 
-# Graph generation imports
-import plotly.graph_objects as go
-import plotly.express as px
-from itertools import cycle
-
-palette = cycle(px.colors.qualitative.Antique)
-
-def plot_confidence_interval(confidence_intervals, user_def):
-    layout_ = go.Layout({"yaxis": {"title":"Confidence"},
-                       "xaxis": {"title":"Confidence Interval for given confidence"},
-                       "template": 'plotly_white',
-                       "showlegend": False})
-    
-    intervals = [f'{user_def}%', '90%', '95%', '98%', '99%']
-
-    fig = go.Figure(layout=layout_)
-    fig.update_xaxes(range=[-3,103])
-    fig.update_yaxes(showgrid=True, type='category')
-
-    for conf_int, category in zip(confidence_intervals, intervals):
-        x = [round(conf_int[0], 2), round(conf_int[1], 2)]
-        y = [category, category]
-        fig.add_trace(go.Scatter(x=x, y=y, text=x,
-                    mode='lines+markers+text',
-                    textposition='top center',
-                    line_color=next(palette),
-                    name=category))
-    #fig.show()
-    return fig
 
 iterval_orders = ('Your confidence interval (for {}% confidence):', 'Confidence interval for 90% confidence:', 'Confidence interval for 95% confidence:'
                 , 'Confidence interval for 98% confidence:', 'Confidence interval for 99% confidence:')
@@ -53,6 +19,7 @@ from tests.holdout.wilson import wilson
 from tests.bootstrap.percentile_bootstrap import percentile_BM
 from tests.cross_validation.cross_validation import cv_interval
 from tests.progressive_validation.progressive_validation import prog_val
+from functions import plot_confidence_interval
 import layouts
 
 external_theme = [dbc.themes.COSMO]
