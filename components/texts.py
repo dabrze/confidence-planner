@@ -90,7 +90,7 @@ wilson_text = '''Function takes number of samples, obtained accuracy and confide
     Returns confidence interval for the given confidence as well as confidence intervals 
     for 90%, 95%, 98% and 99% confidences.'''
 
-bootstrap_text = '''Function takes list of resamples accuracies obtained from bootstrap method (In comma separated format as shown below) and confidence.
+bootstrap_text = '''Function takes list of resamples accuracies obtained from bootstrap method (In comma separated format as shown) and confidence.
     Returns confidence interval for the given confidence as well as confidence intervals 
     for 90%, 95%, 98% and 99% confidences.'''
 

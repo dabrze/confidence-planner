@@ -347,7 +347,7 @@ Z_TEST_REV_SAMPLES = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE Z TEST (Samples) RESULTS"),
+            html.H2("REVERSE Z TEST (Samples) RESULT"),
             html.Div(children=[
                 html.Div('z_test_rev_samples_result', id='z_test_rev_samples_result')
             ], className='right_pane_content')
@@ -407,7 +407,7 @@ Z_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE Z TEST (Confidence) RESULTS"),
+            html.H2("REVERSE Z TEST (Confidence) RESULT"),
             html.Div(children=[
                 html.Div('z_test_rev_confidence_result', id='z_test_rev_confidence_result')
             ], className='right_pane_content')
@@ -537,7 +537,7 @@ T_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE T TEST (Confidence) RESULTS"),
+            html.H2("REVERSE T TEST (Confidence) RESULT"),
             html.Div(children=[
                 html.Div('t_test_rev_confidence_result', id='t_test_rev_confidence_result')
             ], className='right_pane_content')
@@ -669,7 +669,7 @@ LOOSE_LANGFORD_TEST_REV_SAMPLES = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE LOOSE LANGFORD (Samples) RESULTS"),
+            html.H2("REVERSE LOOSE LANGFORD (Samples) RESULT"),
             html.Div(children=[
                 html.Div('loose_langford_rev_samples_result', id='loose_langford_rev_samples_result')
             ], className='right_pane_content')
@@ -721,7 +721,7 @@ LOOSE_LANGFORD_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE LOOSE LANGFORD (Confidence) RESULTS"),
+            html.H2("REVERSE LOOSE LANGFORD (Confidence) RESULT"),
             html.Div(children=[
                 html.Div('loose_langford_rev_confidence_result', id='loose_langford_rev_confidence_result')
             ], className='right_pane_content')
