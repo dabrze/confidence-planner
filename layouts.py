@@ -4,6 +4,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 import components.texts as texts
+from app import app
 
 marks_accuracy={
         0: {'label': '0%', 'style': {'color': 'black'}},
@@ -175,7 +176,7 @@ footer = html.Footer(
 
 HOME = html.Div(children=[
     dcc.Markdown(texts.home_text),
-    html.Img(src="Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
+    html.Img(src=app.get_asset_url("Main_tree.png"), alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
     dcc.Markdown(texts.home_text_2),
 ], id='home')
 
