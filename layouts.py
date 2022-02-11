@@ -264,7 +264,7 @@ Z_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("Z TEST Results"),
+            html.H2("Z TEST RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='z_test_result_graph',
@@ -291,7 +291,7 @@ Z_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=100, step=0.5, 
+                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
                             value=7,
                             marks=marks_accuracy,
                             included=False,
@@ -312,7 +312,7 @@ Z_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
 
-                        dcc.Slider(min=0, max=0.99, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.90,
                             marks=marks_confidence,
                             included=False,
@@ -338,7 +338,7 @@ Z_TEST_REV_SAMPLES = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE Z TEST (Samples) Results"),
+            html.H2("REVERSE Z TEST (Samples) RESULTS"),
             html.Div(children=[
                 html.Div('z_test_rev_samples_result', id='z_test_rev_samples_result')
             ], className='right_pane_content')
@@ -372,7 +372,7 @@ Z_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=100, step=0.5, 
+                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
                             value=7,
                             marks=marks_accuracy,
                             included=False,
@@ -398,7 +398,7 @@ Z_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE Z TEST (Confidence) Results"),
+            html.H2("REVERSE Z TEST (Confidence) RESULTS"),
             html.Div(children=[
                 html.Div('z_test_rev_confidence_result', id='z_test_rev_confidence_result')
             ], className='right_pane_content')
@@ -471,7 +471,7 @@ T_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("T TEST Results"),
+            html.H2("T TEST RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='t_test_result_graph',
@@ -511,7 +511,7 @@ T_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=100, step=0.5, 
+                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
                             value=7,
                             marks=marks_accuracy,
                             included=False,
@@ -528,7 +528,7 @@ T_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE T TEST (Confidence) Results"),
+            html.H2("REVERSE T TEST (Confidence) RESULTS"),
             html.Div(children=[
                 html.Div('t_test_rev_confidence_result', id='t_test_rev_confidence_result')
             ], className='right_pane_content')
@@ -583,7 +583,7 @@ LOOSE_LANGFORD_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -601,7 +601,7 @@ LOOSE_LANGFORD_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("LOOSE LANGFORD Results"),
+            html.H2("LOOSE LANGFORD RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='loose_langford_result_graph',
@@ -628,7 +628,7 @@ LOOSE_LANGFORD_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=100, step=0.5, 
+                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
                             value=7,
                             marks=marks_accuracy,
                             included=False,
@@ -642,7 +642,7 @@ LOOSE_LANGFORD_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
 
-                        dcc.Slider(min=0, max=0.99, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.90,
                             marks=marks_confidence,
                             included=False,
@@ -660,7 +660,7 @@ LOOSE_LANGFORD_TEST_REV_SAMPLES = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE LOOSE LANGFORD (Samples) Results"),
+            html.H2("REVERSE LOOSE LANGFORD (Samples) RESULTS"),
             html.Div(children=[
                 html.Div('loose_langford_rev_samples_result', id='loose_langford_rev_samples_result')
             ], className='right_pane_content')
@@ -694,7 +694,7 @@ LOOSE_LANGFORD_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=100, step=0.5, 
+                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
                             value=7,
                             marks=marks_accuracy,
                             included=False,
@@ -712,7 +712,7 @@ LOOSE_LANGFORD_TEST_REV_CONFIDENCE = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("REVERSE LOOSE LANGFORD (Confidence) Results"),
+            html.H2("REVERSE LOOSE LANGFORD (Confidence) RESULTS"),
             html.Div(children=[
                 html.Div('loose_langford_rev_confidence_result', id='loose_langford_rev_confidence_result')
             ], className='right_pane_content')
@@ -765,7 +765,7 @@ CLOPPER_PEARSON_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -783,7 +783,7 @@ CLOPPER_PEARSON_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("CLOPPER PEARSON Results"),
+            html.H2("CLOPPER PEARSON RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='clopper_pearson_result_graph',
@@ -840,7 +840,7 @@ WILSON_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -858,7 +858,7 @@ WILSON_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("WILSON Results"),
+            html.H2("WILSON RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='wilson_result_graph',
@@ -902,7 +902,7 @@ PERCENTILE_BOOTSTRAP_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -920,7 +920,7 @@ PERCENTILE_BOOTSTRAP_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("PERCENTILE BOOTSTRAP Results"),
+            html.H2("PERCENTILE BOOTSTRAP RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='bootstrap_result_graph',
@@ -990,7 +990,7 @@ CROSS_VALIDATION_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -1008,7 +1008,7 @@ CROSS_VALIDATION_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("CROSS VALIDATION Results"),
+            html.H2("CROSS VALIDATION RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='cross_validation_result_graph',
@@ -1065,7 +1065,7 @@ PROGRESSIVE_VALIDATION_TEST = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0, max=1, step=0.01, 
+                        dcc.Slider(min=0.01, max=0.99, step=0.01, 
                             value=0.80,
                             marks=marks_confidence,
                             included=False,
@@ -1083,7 +1083,7 @@ PROGRESSIVE_VALIDATION_TEST = html.Div(children=[
 
         # Right pane (results):
         dbc.Col(html.Div(children=[
-            html.H2("PROGRESSIVE VALIDATION Results"),
+            html.H2("PROGRESSIVE VALIDATION RESULTS"),
             html.Div(children=[
                 dcc.Graph(
                     id='progressive_validation_result_graph',
