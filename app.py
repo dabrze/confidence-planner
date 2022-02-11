@@ -528,4 +528,4 @@ def progressive_validation_callback(n_click, n, accuracy, confidence):
 
 
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8080)
+    app.run_server(debug=False)
