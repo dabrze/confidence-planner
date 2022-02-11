@@ -57,7 +57,7 @@ import layouts
 
 external_theme = [dbc.themes.COSMO]
 
-app = dash.Dash(external_stylesheets=external_theme,
+app = dash.Dash(__name__, external_stylesheets=external_theme,
     suppress_callback_exceptions=True)
 server = app.server
 
