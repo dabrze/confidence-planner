@@ -98,7 +98,7 @@ HOME = html.Div(children=[
     dcc.Markdown(home_text_2),
 ], id='home')
 
-
+layouts['/home'] = HOME
 
 
 
