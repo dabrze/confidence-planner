@@ -33,7 +33,7 @@ server = app.server
 
 
 
-
+######################## HOME WEBPAGE EDIT ########################
 # Storing Home layout here due to possible circural imports:
 
 home_text = '''### **How to use the app**
@@ -70,9 +70,12 @@ HOME = html.Div(children=[
     # html.Img(src=app.get_asset_url("Main_tree.png"),
     dcc.Markdown(home_text_2),
     dcc.Markdown(home_text_3),
+    layouts.elements['footer']
 ], id='home')
 
 layouts.elements['/home'] = HOME
+
+######################## HOME WEBPAGE EDIT ########################
 
 
 
@@ -134,7 +137,7 @@ def z_test_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -142,7 +145,7 @@ def z_test_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -202,7 +205,7 @@ def t_test_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -210,7 +213,7 @@ def t_test_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -256,7 +259,7 @@ def loose_langford_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -264,7 +267,7 @@ def loose_langford_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -324,7 +327,7 @@ def clopper_pearson_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -332,7 +335,7 @@ def clopper_pearson_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -364,7 +367,7 @@ def wilson_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -372,7 +375,7 @@ def wilson_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -404,7 +407,7 @@ def percentile_bootstrap_callback(n_click, samples, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -412,7 +415,7 @@ def percentile_bootstrap_callback(n_click, samples, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -489,7 +492,7 @@ def cross_validation_callback(n_click, n, k, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -497,7 +500,7 @@ def cross_validation_callback(n_click, n, k, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 
@@ -530,7 +533,7 @@ def progressive_validation_callback(n_click, n, accuracy, confidence):
         upper = str(round(interval[1], 2)) + '%'
 
         if _ == 0: # updating values defined by the user
-            inter_desc = "Your confidence interval (for {}% confidence):".format(confidence*100)
+            inter_desc = "Your confidence interval (for {}% confidence):".format(round(confidence*100,2))
             _ = 1
         
         div_str = inter_desc + ' ' + lower + ' - ' + upper
@@ -538,7 +541,7 @@ def progressive_validation_callback(n_click, n, accuracy, confidence):
 
 
 
-    plot = plot_confidence_interval(intervals, confidence*100)
+    plot = plot_confidence_interval(intervals, round(confidence*100,2))
 
     return divs, plot
 

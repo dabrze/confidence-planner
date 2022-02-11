@@ -159,7 +159,7 @@ navbar = dbc.NavbarSimple(
 footer = html.Footer(
     children=[
         html.Div(children=[
-                html.P('2021 Poznan University of Technology.', className='')
+                html.A(html.P('2022 Poznan University of Technology.', className=''), href='https://www.put.poznan.pl/en?q=')
             ]
         )
     ]
@@ -178,6 +178,7 @@ HOME = html.Div(children=[
     html.Img(src="Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
     # html.Img(src=app.get_asset_url("Main_tree.png"),
     dcc.Markdown(texts.home_text_2),
+    footer
 ], id='home')
 
 ########## HOME PAGE ##########
@@ -185,7 +186,15 @@ HOME = html.Div(children=[
 ########## ABOUT PAGE ##########
 
 ABOUT = html.Div(children=[
-    dcc.Markdown(texts.about_text)])
+    dcc.Markdown(texts.about_text),
+     html.Footer(
+    children=[
+        html.Div(children=[
+                html.A(html.P('2022 Poznan University of Technology.', className=''), href='https://www.put.poznan.pl/en?q=')
+            ]
+        )
+    ]
+)])
 
 ########## ABOUT PAGE ##########
 
@@ -893,7 +902,7 @@ PERCENTILE_BOOTSTRAP_TEST = html.Div(children=[
                             id="bootstrap_samples",
                             type='text',
                             placeholder='Number of samples',
-                            value='50.099273887544065,49.46878483304577,51.50104411779424,50.30309460060942,48.76100352762221,49.32691077846691,48.888452270129854,49.64402669528858,47.75469797205529,46.48782120640318',
+                            value='48.816081929448714,51.14709379333421,48.965710829479676,49.74254738927312,48.2690776015456,48.998736540599175,49.93842963069065,49.61912108773732,50.8291825511268,48.77569233805326,48.118148168598296,49.96073070469448,52.654630031446054,50.22854894045708,49.882020732992565,52.362079495748944,50.65141753519736,49.240679510693,49.41949423340501,49.87517007791748,50.361147539058706,51.55906551034035,50.30881438235992,49.36394118427662,50.3656429452781,50.09448246004594,49.25057762446265,49.936815425902495,49.34037929543002,50.93328650923615,49.305816916146895,49.46163639595628,50.08023376306553,51.54222936632961,50.63290402049816,50.14251782692496,51.37857859269866,51.2492371738837,49.36233661933695,50.15461644572862,49.81650467132479,48.63393898242631,48.93700517753274,51.34078859448949,49.381009308535916,51.10882324683109,51.0843922475742,49.724939225615906,50.198142644277645,49.29213417184266',
                             style={'width': '100%', 'text-align':'center'}
                         ), width={
                             "size": 6, "offset": 3}),]),

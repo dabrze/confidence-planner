@@ -31,8 +31,8 @@ about_text = '''### **About the project**
 The **Prediction Confidence Planner** application provides different methods for calculating confidence interval for obtained accuracy from different training techniques. The aim of the confidence interval is to measure the degree of uncertainty or certainty in a sampling method. There are four available options and number of tests to choose from.
 
 ### **Contributors**
- - Antoni Klorek
- - Karol Roszak
+ - Antoni Klorek, Poznan University of Technology student
+ - Karol Roszak, Poznan University of Technology student
 
 ### **References**
 
@@ -90,7 +90,7 @@ wilson_text = '''Function takes number of samples, obtained accuracy and confide
     Returns confidence interval for the given confidence as well as confidence intervals 
     for 90%, 95%, 98% and 99% confidences.'''
 
-bootstrap_text = '''Function takes list of resamples accuracies obtained from bootstrap method and confidence.
+bootstrap_text = '''Function takes list of resamples accuracies obtained from bootstrap method (In comma separated format as shown below) and confidence.
     Returns confidence interval for the given confidence as well as confidence intervals 
     for 90%, 95%, 98% and 99% confidences.'''
 

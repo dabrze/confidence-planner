@@ -4,6 +4,15 @@
   font-family: "Times New Roman", Times, serif;
 }
 
+H2{
+  text-align: center;
+  margin: 2% 0 2% 0;
+}
+
+Footer{
+  text-align: center;
+}
+
 .page_content {
   overflow-x: hidden;
   transition: margin-left .5s;
@@ -11,11 +20,6 @@
   margin: 1%;
   background: white;
   z-index: -1;
-}
-
-H2{
-  text-align: center;
-  margin: 2% 0 2% 0;
 }
 
 .website_background {
