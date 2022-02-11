@@ -14,7 +14,7 @@ def plot_confidence_interval(confidence_intervals, user_def):
     intervals = [f'{user_def}%', '90%', '95%', '98%', '99%']
 
     fig = go.Figure(layout=layout_)
-    fig.update_xaxes(range=[-3,103])
+    # fig.update_xaxes(range=[-3,103])
     fig.update_yaxes(showgrid=True, type='category')
 
     for conf_int, category in zip(confidence_intervals, intervals):
@@ -22,7 +22,7 @@ def plot_confidence_interval(confidence_intervals, user_def):
         y = [category, category]
         fig.add_trace(go.Scatter(x=x, y=y, text=x,
                     mode='lines+markers+text',
-                    textposition='top center',
+                    textposition=['top center', 'top center'],
                     line_color=next(palette),
                     name=category))
     #fig.show()
