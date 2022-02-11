@@ -175,7 +175,7 @@ footer = html.Footer(
 
 HOME = html.Div(children=[
     dcc.Markdown(texts.home_text),
-    html.Img(src="/assets/Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
+    html.Img(src="Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
     dcc.Markdown(texts.home_text_2),
 ], id='home')
 
