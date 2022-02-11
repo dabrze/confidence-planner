@@ -1,8 +1,5 @@
 # Long texts from website stored here for more readability
 
-from tests.holdout.loose_langford import loose_langford
-
-
 home_text = '''### **How to use the app**
 The application provides different methods for calculating confidence interval for obtained accuracy from different training techniques. The aim of the confidence interval is to measure the degree of uncertainty or certainty in a sampling method. There are four available options and number of tests to choose from.
 
