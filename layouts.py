@@ -4,7 +4,6 @@ import dash_core_components as dcc
 import dash_html_components as html
 
 import components.texts as texts
-from app import app
 
 marks_accuracy={
         0: {'label': '0%', 'style': {'color': 'black'}},
