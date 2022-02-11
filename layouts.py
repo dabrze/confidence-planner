@@ -100,7 +100,7 @@ navbar = dbc.NavbarSimple(
                 # dbc.DropdownMenuItem("Cross Validation", header=True),
                 dbc.DropdownMenuItem("Cross-Validation", href="/cross_validation"),
                 # dbc.DropdownMenuItem("Progressive Validation", header=True),
-                dbc.DropdownMenuItem("Progressive-Validatio", href="/progressive_validation"),
+                dbc.DropdownMenuItem("Progressive-Validation", href="/progressive_validation"),
                 dbc.DropdownMenuItem("Clopper-Pearson test", href="/clopper_pearson", toggle=False),
                 dbc.DropdownMenuItem("Wilson test", href="/wilson"),
                 dbc.DropdownMenuItem("Z-test", header=True),
@@ -125,8 +125,8 @@ navbar = dbc.NavbarSimple(
                 #     color='white',
                 #     direction="left",
                 #     label='T-test'),
-                dbc.DropdownMenuItem("Loose-Langford test", header=True),
-                dbc.DropdownMenuItem("Loose-Langford test", href="/loose_langford"),
+                dbc.DropdownMenuItem("Loose test set bound (Langford)", header=True),
+                dbc.DropdownMenuItem("Loose test set bound (Langford)", href="/loose_langford"),
                 dbc.DropdownMenuItem("Reverse Loose-Langford test - samples", href="/loose_langford_reverse_samples"),
                 dbc.DropdownMenuItem("Reverse Loose-Langford test - confidence", href="/loose_langford_reverse_confidence"),
                 # dbc.DropdownMenu(children=[
@@ -175,7 +175,7 @@ footer = html.Footer(
 
 HOME = html.Div(children=[
     dcc.Markdown(texts.home_text),
-    html.Img(src="assets/Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
+    html.Img(src="/assets/Main_tree.png", alt="Description of 4 options to choose from (Holdout, Bootstrap, Cross-Validation, Progressive-Validation)", width="75%", height="75%"), # width="500", height="600"
     dcc.Markdown(texts.home_text_2),
 ], id='home')
 
