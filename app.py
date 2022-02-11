@@ -526,6 +526,5 @@ def progressive_validation_callback(n_click, n, accuracy, confidence):
 
     return divs, plot
 
-
 if __name__ == '__main__':
     app.run_server(debug=False)
