@@ -279,7 +279,7 @@ def percentile_BM(accs:list, conf:float) -> tuple:
     '''
 
     # Scalling accuracies by *100 as functions were prepared for percentage scale (0-100)
-    accs = list(accs).sort()
+    accs = sorted(list(accs))
     accs = np.array(accs) * 100
 
     # Checking correctness of user input
