@@ -5,6 +5,7 @@
 ![last commit](https://img.shields.io/github/last-commit/Lorakszak/confidence-planner)
 ![Discussions](https://img.shields.io/github/discussions/Lorakszak/confidence-planner)
 
+
  <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/confidence-planner) # contributors (opt)-->
 <!-- ![pypi](https://img.shields.io/pypi/v/pybadges.svg) -->
 <!-- ![versions](https://img.shields.io/pypi/pyversions/pybadges.svg) -->
