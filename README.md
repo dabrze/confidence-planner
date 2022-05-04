@@ -202,3 +202,13 @@ print(confidence_planner.prog_val(n_test, np.mean(accuracies), 0.85))
 ```
 
 For more examples see examples directory.
+
+## Online App
+
+Hey! If you don't want to use code, you can check out our confidence-planner web app hosted online
+
+https://prediction-confidence-planner.herokuapp.com
+
+Want to host app yourself? No problem just follow steps below...
+
+TODO
