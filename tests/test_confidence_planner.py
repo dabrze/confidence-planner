@@ -33,6 +33,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             clopper_pearson(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             clopper_pearson(n=79, acc=0.88, conf=1)
+           
+        # should not raise exception
+        clopper_pearson(55, 0.80, 0.9)
         
 
 
@@ -56,6 +59,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             cv_interval(n=79, k=10, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             cv_interval(n=79, k=10, acc=0.88, conf=1)
+           
+        # should not raise exception
+        cv_interval(888, 7, 0.8, 0.88)
 
 
     def test_loose_langford_conf(self):
@@ -68,6 +74,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             loose_langford_conf(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
             loose_langford_conf(diff=1.03421, n=100)
+           
+        # should not raise exception
+        loose_langford_conf(0.1, 200)
 
 
     def test_loose_langford_reverse(self):
@@ -82,6 +91,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             loose_langford_reverse(diff=0.1, conf=0)
         with self.assertRaises(Exception):
             loose_langford_reverse(diff=0.1, conf=1)
+           
+        # should not raise exception
+        loose_langford_reverse(0.15, 0.9)
 
 
     def test_loose_langford(self):
@@ -100,6 +112,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             loose_langford(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             loose_langford(n=79, acc=0.88, conf=1)
+           
+        # should not raise exception
+        loose_langford(100, 0.8, 0.77)
 
 
     def test_percentile_BM(self):
@@ -114,6 +129,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             percentile_BM(accs=[0.88, 0.77, 0.68, 0.79], conf=0)
         with self.assertRaises(Exception):
             percentile_BM(accs=[0.88, 0.77, 0.68, 0.79], conf=1)
+           
+        # should not raise exception
+        percentile_BM([0.8, 0.77, 0.9, 0.87, 0.7], 0.9)
 
 
     def test_prog_val(self):
@@ -132,6 +150,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             prog_val(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             prog_val(n=79, acc=0.88, conf=1)
+           
+        # should not raise exception
+        prog_val(100, 0.9, 0.7)
 
 
     def test_reverse_ttest_pr_conf(self):
@@ -144,6 +165,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             reverse_ttest_pr_conf(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
             reverse_ttest_pr_conf(diff=1.03421, n=100)
+           
+        # should not raise exception
+        reverse_ttest_pr_conf(0.09, 321)
 
 
     def test_reverse_ztest_pr_conf(self):
@@ -156,6 +180,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             reverse_ztest_pr_conf(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
             reverse_ztest_pr_conf(diff=1.03421, n=100)
+           
+        # should not raise exception
+        reverse_ztest_pr_conf(0.2, 82)
 
 
     def test_reverse_ztest_pr(self):
@@ -170,6 +197,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             reverse_ztest_pr(diff=0.1, conf=0)
         with self.assertRaises(Exception):
             reverse_ztest_pr(diff=0.1, conf=1)
+           
+        # should not raise exception
+        reverse_ztest_pr(0.08, 0.9)
 
 
     def test_ttest_pr(self):
@@ -188,6 +218,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             ttest_pr(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             ttest_pr(n=79, acc=0.88, conf=1)
+           
+        # should not raise exception
+        ttest_pr(100, 0.7, 0.88)
 
 
     def test_wilson(self):
@@ -206,6 +239,9 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             wilson(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             wilson(n=79, acc=0.88, conf=1)
+          
+        # should not raise exception
+        wilson(132, 0.8, 0.8)
 
 
 
@@ -225,8 +261,8 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             ztest_pr(n=79, acc=0.88, conf=0)
         with self.assertRaises(Exception):
             ztest_pr(n=79, acc=0.88, conf=1)
+           
+        # should not raise exception
+        ztest_pr(321, 0.7, 0.9)
 
-
-# if __name__ == '__main__':
-#     unittest.main()
 
