@@ -10,6 +10,7 @@
 <!-- ![versions](https://img.shields.io/pypi/pyversions/pybadges.svg) -->
 <!-- ![Package upload](https://github.com/Lorakszak/confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
 
+
 ## Prediction Confidence Planner
 
 ### Project description:
