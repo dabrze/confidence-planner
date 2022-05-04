@@ -1,9 +1,9 @@
-[![GitHub License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![GitHub Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
-![GitHub Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/tests.yml/badge.svg)
-![GitHub repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
-![GitHub last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
-![GitHub Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
+![Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/tests.yml/badge.svg)
+![repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
+![last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
+![Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner)
 
  <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/prediction-confidence-planner) # contributors (opt)-->
 <!-- ![pypi](https://img.shields.io/pypi/v/pybadges.svg) -->
