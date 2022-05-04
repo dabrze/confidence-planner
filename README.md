@@ -72,11 +72,11 @@ clf.fit(X_train, y_train)
 # Predict the value of the digit on the test subset
 predicted = clf.predict(X_test)
 
-# Get the model's accuracy in the form of percentages
-accuracy_percents = 100*metrics.accuracy_score(y_test, predicted)
+# Get the model's accuracy
+accuracy = metrics.accuracy_score(y_test, predicted)
 
 # Print confidence interval around the obtained accuracy with 85% confidence
-print(confidence_planner.wilson(len(y_test), accuracy_percents, 0.85))
+print(confidence_planner.wilson(len(y_test), accuracy, 0.85))
 ```
 
 
@@ -125,11 +125,11 @@ for i in range(n_iter):
     # Predict the value of the digit on the test subset
     predicted = clf.predict(X_test)
 
-    # Get the model's accuracy in the form of percentages
-    accuracy_percents = 100*metrics.accuracy_score(y_test, predicted)
+    # Get the model's accuracy
+    accuracy = metrics.accuracy_score(y_test, predicted)
 
     # Append accuracy to the list
-    accuracies.append(accuracy_percents)
+    accuracies.append(accuracy)
 
 # Print confidence interval around the obtained accuracy with 85% confidence
 print(confidence_planner.percentile_BM(accuracies, 0.85))
@@ -160,11 +160,11 @@ cv = KFold(n_splits=n_splits, shuffle=True)
 # Evaluate model
 scores = cross_val_score(clf, data, digits.target, scoring='accuracy', cv=cv, n_jobs=-1)
 
-# Get the model's accuracy in the form of percentages
-accuracy_percents = 100*mean(scores)
+# Get the model's accuracy
+accuracy = mean(scores)
 
 # Print confidence interval around the obtained accuracy with 85% confidence
-print(confidence_planner.cv_interval(n_samples, n_splits, accuracy_percents, 0.85))
+print(confidence_planner.cv_interval(n_samples, n_splits, accuracy, 0.85))
 ```
 
 
@@ -198,9 +198,9 @@ for train_index, test_index in tscv.split(data):
     clf.fit(X_train, y_train)
     # Predict the value of the digit on the test subset
     predicted = clf.predict(X_test)
-    # Get the model's accuracy in the form of percentages
-    accuracy_percents = 100*metrics.accuracy_score(y_test, predicted)
-    accuracies.append(accuracy_percents)
+    # Get the model's accuracy
+    accuracy = metrics.accuracy_score(y_test, predicted)
+    accuracies.append(accuracy)
 
 # Print confidence interval around the obtained accuracy with 85% confidence
 print(confidence_planner.prog_val(n_test, np.mean(accuracies), 0.85))
