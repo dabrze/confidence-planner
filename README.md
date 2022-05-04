@@ -22,7 +22,7 @@ The application provides different methods for calculating confidence interval f
  - **Cross-Validation method** - Cross-validation or "k-fold cross-validation" is when the dataset is randomly split up into k groups. One of the groups is used as the test set and the rest are used as the training set. The model is trained on the training set and scored on the test set. Then, the process is repeated until each unique group has been used as the test set.
  - **Progressive Validation method** - Progressive validation starts by first learning a hypothesis on the training set and then testing on the first example of the test set. Then, we train on the training set plus the first example of the test set and test on the second example of the test set. The process then continues. The progressive validation technique is used in data streams.
  - 
-![Methods tree](https://github.com/dabrze/prediction-confidence-planner/blob/package/main_tree.png?raw=true)
+![Methods tree](https://github.com/dabrze/confidence-planner/blob/package/main_tree.png?raw=true)
 
  - **Holdout methods:**
    - **Z-test** - use when holdout sample size is big (>30) and the distribution of the test statistic can be approximated by a normal distribution
