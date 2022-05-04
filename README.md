@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
-![Tests](https://github.com/dabrze/confidence-planner/actions/workflows/tests.yml/badge.svg)
+![Tests](https://github.com/dabrze/confidence-planner/actions/workflows/Tests.yml/badge.svg)
 ![repo size](https://img.shields.io/github/repo-size/dabrze/confidence-planner)
 ![last commit](https://img.shields.io/github/last-commit/dabrze/confidence-planner)
 ![Discussions](https://img.shields.io/github/discussions/dabrze/confidence-planner)
