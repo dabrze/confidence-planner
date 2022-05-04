@@ -1,15 +1,15 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
-![Tests](https://github.com/Lorakszak/confidence-planner/actions/workflows/tests.yml/badge.svg)
-![repo size](https://img.shields.io/github/repo-size/Lorakszak/confidence-planner)
-![last commit](https://img.shields.io/github/last-commit/Lorakszak/confidence-planner)
-![Discussions](https://img.shields.io/github/discussions/Lorakszak/confidence-planner)
+![Tests](https://github.com/dabrze/confidence-planner/actions/workflows/tests.yml/badge.svg)
+![repo size](https://img.shields.io/github/repo-size/dabrze/confidence-planner)
+![last commit](https://img.shields.io/github/last-commit/dabrze/confidence-planner)
+![Discussions](https://img.shields.io/github/discussions/dabrze/confidence-planner)
 
-
- <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/confidence-planner) # contributors (opt)-->
+<!-- Optional badges that might get added when we publish the package on PyPI -->
+<!-- ![GitHub contributors](https://img.shields.io/github/contributors/dabrze/confidence-planner) # contributors (opt)-->
 <!-- ![pypi](https://img.shields.io/pypi/v/pybadges.svg) -->
 <!-- ![versions](https://img.shields.io/pypi/pyversions/pybadges.svg) -->
-<!-- ![Package upload](https://github.com/Lorakszak/confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
+<!-- ![Package upload](https://github.com/dabrze/confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
 
 
 ## Prediction Confidence Planner
@@ -21,7 +21,9 @@ The application provides different methods for calculating confidence interval f
  - **Bootstrap method** - Bootstrap is a resampling method by independently  sampling  with  replacement  from  an  existing  sample  data  with same sample size n, and performing inference among these resampled data.
  - **Cross-Validation method** - Cross-validation or "k-fold cross-validation" is when the dataset is randomly split up into k groups. One of the groups is used as the test set and the rest are used as the training set. The model is trained on the training set and scored on the test set. Then, the process is repeated until each unique group has been used as the test set.
  - **Progressive Validation method** - Progressive validation starts by first learning a hypothesis on the training set and then testing on the first example of the test set. Then, we train on the training set plus the first example of the test set and test on the second example of the test set. The process then continues. The progressive validation technique is used in data streams.
-![Methods tree](https://github.com/Lorakszak/prediction-confidence-planner/blob/package/main_tree.png?raw=true)
+ - 
+![Methods tree](https://github.com/dabrze/prediction-confidence-planner/blob/package/main_tree.png?raw=true)
+
  - **Holdout methods:**
    - **Z-test** - use when holdout sample size is big (>30) and the distribution of the test statistic can be approximated by a normal distribution
    - **T-test** - use when holdout sample size is small (<30) and the test statistic follows a normal distribution
@@ -212,6 +214,6 @@ If you don't want to write code, you can check out our confidence-planner web ap
 
 https://prediction-confidence-planner.herokuapp.com
 
-Want to host app yourself? No problem just follow steps below...
+Want to host app yourself? No problem just follow steps available **[here](https://github.com/dabrze/confidence-planner/tree/dash)**
 
-TODO
+<!-- TODO: Add description how to run dash app locally -->
