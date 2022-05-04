@@ -1,24 +1,25 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
-![Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/tests.yml/badge.svg)
-![Repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
-![Last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
-![Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner)
+![Tests](https://github.com/Lorakszak/confidence-planner/actions/workflows/tests.yml/badge.svg)
+![repo size](https://img.shields.io/github/repo-size/Lorakszak/confidence-planner)
+![last commit](https://img.shields.io/github/last-commit/Lorakszak/confidence-planner)
+![Discussions](https://img.shields.io/github/discussions/Lorakszak/confidence-planner)
 
- <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/prediction-confidence-planner) # contributors (opt)-->
+ <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/confidence-planner) # contributors (opt)-->
 <!-- ![pypi](https://img.shields.io/pypi/v/pybadges.svg) -->
 <!-- ![versions](https://img.shields.io/pypi/pyversions/pybadges.svg) -->
-<!-- ![Package upload](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
+<!-- ![Package upload](https://github.com/Lorakszak/confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
 
 ## Prediction Confidence Planner
 
 ### Project description:
+
 The application provides different methods for calculating confidence interval for obtained accuracy from different training/testing techniques. The aim of the confidence interval is to measure the degree of uncertainty or certainty in a sampling method. There are four available options and number of tests to choose from:
 - **Holdout methods** - Holdout  is  when  one  splits  up  a  dataset  into  a  "train"  and "test"  set.  The  training  set  is  what  the  model  is  trained  on,  and  the  test  set is  used  to  see  how  well  that  model  performs  on  unseen  data.
  - **Bootstrap method** - Bootstrap is a resampling method by independently  sampling  with  replacement  from  an  existing  sample  data  with same sample size n, and performing inference among these resampled data.
  - **Cross-Validation method** - Cross-validation or "k-fold cross-validation" is when the dataset is randomly split up into k groups. One of the groups is used as the test set and the rest are used as the training set. The model is trained on the training set and scored on the test set. Then, the process is repeated until each unique group has been used as the test set.
  - **Progressive Validation method** - Progressive validation starts by first learning a hypothesis on the training set and then testing on the first example of the test set. Then, we train on the training set plus the first example of the test set and test on the second example of the test set. The process then continues. The progressive validation technique is used in data streams.
-
+![Methods tree](https://github.com/Lorakszak/prediction-confidence-planner/blob/package/main_tree.png?raw=true)
  - **Holdout methods:**
    - **Z-test** - use when holdout sample size is big (>30) and the distribution of the test statistic can be approximated by a normal distribution
    - **T-test** - use when holdout sample size is small (<30) and the test statistic follows a normal distribution
