@@ -1,5 +1,14 @@
-[![Python 3.x](https://img.shields.io/badge/python-3.6-blue.svg)](https://www.python.org/downloads/release/python-360/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3](https://img.shields.io/badge/python-3-blue.svg)](https://www.python.org/downloads/)
+![Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/tests.yml/badge.svg)
+![Repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
+![Last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
+![Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner)
+
+ <!-- ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/prediction-confidence-planner) # contributors (opt)-->
+<!-- ![pypi](https://img.shields.io/pypi/v/pybadges.svg) -->
+<!-- ![versions](https://img.shields.io/pypi/pyversions/pybadges.svg) -->
+<!-- ![Package upload](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
 
 ## Prediction Confidence Planner
 
@@ -193,3 +202,13 @@ print(confidence_planner.prog_val(n_test, np.mean(accuracies), 0.85))
 ```
 
 For more examples see examples directory.
+
+## Online App
+
+If you don't want to write code, you can check out our confidence-planner web app hosted online!
+
+https://prediction-confidence-planner.herokuapp.com
+
+Want to host app yourself? No problem just follow steps below...
+
+TODO
