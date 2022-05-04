@@ -5,7 +5,7 @@
 ![GitHub repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
 ![GitHub contributors](https://img.shields.io/github/contributors/Lorakszak/prediction-confidence-planner)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
-![GitHub Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner))
+![GitHub Discussions](https://img.shields.io/github/discussions/Lorakszak/prediction-confidence-planner)
  
 ## Prediction Confidence Planner
 
