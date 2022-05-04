@@ -1,5 +1,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-![Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/package-tester.yml/badge.svg)
+![Tests](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/Tests.yml/badge.svg)
 <!-- ![Package upload](https://github.com/Lorakszak/prediction-confidence-planner/actions/workflows/python-publish.yml/badge.svg) -->
 ![Repo size](https://img.shields.io/github/repo-size/Lorakszak/prediction-confidence-planner)
 ![Last commit](https://img.shields.io/github/last-commit/Lorakszak/prediction-confidence-planner)
