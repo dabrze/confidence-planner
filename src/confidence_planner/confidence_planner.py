@@ -185,7 +185,7 @@ def loose_langford_reverse(diff:float, conf:float) -> int:
     ----------
     diff : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.5.
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
         Should be between 0 and 1 -> <0, 1>.
     conf : float
         Confidence. Should be between 0 and 1 -> (0, 1).
