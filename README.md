@@ -1,4 +1,11 @@
-![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+python -m pybadges \
+    --left-text="python" \
+    --right-text="3.2, 3.3, 3.4, 3.5, 3.6" \
+    --whole-link="https://www.python.org/" \
+    --browser \
+    --logo='https://dev.w3.org/SVG/tools/svgweb/samples/svg-files/python.svg'
+    --embed-logo yes
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## Prediction Confidence Planner
 
