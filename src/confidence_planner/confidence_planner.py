@@ -5,7 +5,7 @@ import statsmodels as sm
 import numpy as np
 
 
-def min_max(tup):
+def min_max(tup:tuple) -> tuple:
     '''
     Function takes tuple with lists with the accuracy confidence interval
     and guarantees that the lower bound will be at least 0 and the upper bound will be at most 100.
