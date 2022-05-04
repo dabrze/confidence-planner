@@ -16,7 +16,7 @@ def min_max(tup:tuple) -> tuple:
     print('Confidence intervals around given accuracy for your confidence and 90%, 95%, 98%, 99%.')
     return tup
 
-def min_max_conf(conf):
+def min_max_conf(conf:float) -> float:
     '''
     Function takes confidence and guarantees that it will be in the range 0-1
     '''
@@ -35,20 +35,22 @@ def clopper_pearson(n:int, acc:float, conf:float) -> tuple:
     Parameters
     ----------
     n : int
-        Number of samples used in a test set greater than 0.
+        Number of samples used in a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
     
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
     # Checking correctness of user input
     if n <= 0:
         raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
     
     if acc < 0 or acc > 100:
-        raise Exception(f'Accuracy should by between [0, 100], not \"{acc}\"')
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
 
     if conf <= 0 or conf >= 1:
         raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
@@ -71,7 +73,7 @@ def clopper_pearson(n:int, acc:float, conf:float) -> tuple:
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def cv_interval(n, k, acc, conf):
+def cv_interval(n:int, k:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples (n), number of folds(k), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -80,15 +82,31 @@ def cv_interval(n, k, acc, conf):
     Parameters
     ----------
     n : int
-        Number of all samples used from the dataset.
+        Number of all samples used from the dataset, greater than 0.
     k : int
-        Number of holds used in cross validation.
+        Number of folds used in cross validation, greater than 0.
     acc : float or int
-        Obtained accuracy - final accuracy, e.g. average of all accuracies from each hold.
-        Should be between 0 and 100 (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy - final accuracy, e.g. average of all accuracies from each fold.
+        Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+    
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if k <= 0:
+        raise Exception(f'Number of folds must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
     
     x90 = math.log((1-0.9)/2)*k/2/n
     t90 = math.sqrt(-x90)
@@ -124,7 +142,7 @@ def cv_interval(n, k, acc, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def loose_langford_conf(diff, n):
+def loose_langford_conf(diff:float, n:int) -> float:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and number of samples (n).
@@ -134,11 +152,22 @@ def loose_langford_conf(diff, n):
     ----------
     diff : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 90 and interval is [85, 95], then diff=5.
-        Should be between 0 and 100 (as in the percentage scale).
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
+        Should be between 0 and 1 -> <0, 1>.
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set greater than 0.
     '''
+
+    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
+    diff = diff * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if diff < 0 or diff > 100:
+        raise Exception(f'Difference should by between <0, 1>, not \"{diff/100}\"')
+
     pr = diff/100
     pr2 = (diff/100)**2
     expnt = math.exp(2*n*pr2)
@@ -146,7 +175,7 @@ def loose_langford_conf(diff, n):
     return min_max_conf(round(conf, 2))
 
 
-def loose_langford_reverse(diff, conf):
+def loose_langford_reverse(diff:float, conf:float) -> int:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and confidence (conf).
@@ -156,16 +185,27 @@ def loose_langford_reverse(diff, conf):
     ----------
     diff : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 90 and interval is [85, 95], then diff=5.
-        Should be between 0 and 100 (as in the percentage scale).
-    conf : float or int
-        Confidence. Should be between 0 and 1.
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.5.
+        Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Confidence. Should be between 0 and 1 -> (0, 1).
     '''
+
+    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
+    diff = diff * 100
+
+    # Checking correctness of user input
+    if diff < 0 or diff > 100:
+        raise Exception(f'Difference should by between <0, 1>, not \"{diff/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+
     n = math.log(2/(1-conf))/(2*(diff/100)**2)
     return int(round(n))
 
 
-def loose_langford(n, acc, conf):
+def loose_langford(n:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -174,13 +214,26 @@ def loose_langford(n, acc, conf):
     Parameters
     ----------
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+    
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+
     
     pr90 = math.sqrt(math.log(2/(1-0.90))/(n*2))
     upper_bound90 = acc + pr90*100
@@ -210,7 +263,7 @@ def loose_langford(n, acc, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def percentile_BM(accs, conf):
+def percentile_BM(accs:list, conf:float) -> tuple:
     '''
     Function takes list of resamples accuracies obtained from bootstrap method(accs) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -220,12 +273,22 @@ def percentile_BM(accs, conf):
     ----------
     accs : list
         List of resamples accuracies from each bootstrapping.
-        Accuracies should be between 0 and 100 (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Accuracies should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
-    accs.sort()
-    accs = np.array(accs)
+
+    # Scalling accuracies by *100 as functions were prepared for percentage scale (0-100)
+    accs = list(accs).sort()
+    accs = np.array(accs) * 100
+
+    # Checking correctness of user input
+    if any(accs < 0) or any(accs > 100):
+        raise Exception(f'Each accuracy should by between <0, 1>, some is outside these boundaries')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+
     
     lower_bound90 = np.percentile(accs, 100*((1-0.9)/2))
     upper_bound90 = np.percentile(accs, 100*(0.9 + (1-0.9)/2))
@@ -250,7 +313,7 @@ def percentile_BM(accs, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def prog_val(s, acc, conf):
+def prog_val(s:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples from a test set (s), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -259,13 +322,25 @@ def prog_val(s, acc, conf):
     Parameters
     ----------
     s : int
-        Number of samples from a test set.
+        Number of samples from a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if s <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{s}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
     
     x90 = math.log((1-0.9)/2)/2/s
     t90 = math.sqrt(-x90)
@@ -301,7 +376,7 @@ def prog_val(s, acc, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def reverse_ttest_pr_conf(diff, n):
+def reverse_ttest_pr_conf(diff:float, n:int) -> float:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and number of samples (n).
@@ -311,17 +386,28 @@ def reverse_ttest_pr_conf(diff, n):
     ----------
     diff : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 90 and interval is [85, 95], then diff=5.
-        Should be between 0 and 100 (as in the percentage scale).
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
+        Should be between 0 and 1 -> <0, 1>.
     n : int
-        Number of samples from a test set.
+        Number of samples from a test set greater than 0.
     '''
+
+    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
+    diff = diff * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if diff < 0 or diff > 100:
+        raise Exception(f'Difference should by between <0, 1>, not \"{diff/100}\"')
+
     pr = diff/100
     t = pr/math.sqrt(0.25/n)
     return min_max_conf(round(2*st.t.cdf(t, n-1)-1, 2))
 
 
-def reverse_ztest_pr_conf(diff, n):
+def reverse_ztest_pr_conf(diff:float, n:int) -> float:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and number of samples (n).
@@ -331,16 +417,27 @@ def reverse_ztest_pr_conf(diff, n):
     ----------
     diff : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 90 and interval is [85, 95], then diff=5.
-        Should be between 0 and 100 (as in the percentage scale).
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
+        Should be between 0 and 1 -> <0, 1>.
     n : int
-        Number of samples from a test set.
+        Number of samples from a test set greater than 0.
     '''
+
+    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
+    diff = diff * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if diff < 0 or diff > 100:
+        raise Exception(f'Difference should by between <0, 1>, not \"{diff/100}\"')
+
     z = (math.sqrt(n)*diff)/50
     return min_max_conf(round(2*st.norm.cdf(z)-1, 2))
 
 
-def reverse_ztest_pr(diff, conf):
+def reverse_ztest_pr(diff:float, conf:float) -> int:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and confidence (conf).
@@ -348,19 +445,31 @@ def reverse_ztest_pr(diff, conf):
 
     Parameters
     ----------
-    diff : float or int
+    diff : float
         Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 90 and interval is [85, 95], then diff=5.
-        Should be between 0 and 100 (as in the percentage scale).
-    conf : float or int
-        Confidence. Should be between 0 and 1.
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
+        Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+
+    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
+    diff = diff * 100
+
+    # Checking correctness of user input
+    if diff < 0 or diff > 100:
+        raise Exception(f'Difference should by between <0, 1>, not \"{diff/100}\"')
+    
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+
+
     z = st.norm.ppf(1-(1-conf)/2)
     n = (z*math.sqrt(0.25)/(diff/100))**2
     return int(round(n))
 
 
-def ttest_pr(n, acc, conf):
+def ttest_pr(n:int, acc:float, conf:float) -> tuple:
     '''
     This test works for smaller number of samples (<30), uses t-distribution.
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
@@ -370,14 +479,27 @@ def ttest_pr(n, acc, conf):
     Parameters
     ----------
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
     
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+    
+
     t90 = st.t.ppf(1-(1-0.9)/2, n-1)
     pr90 = t90*math.sqrt(0.25/n)
     upper_bound90 = acc + 100*pr90
@@ -412,7 +534,7 @@ def ttest_pr(n, acc, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def wilson(n, acc, conf):
+def wilson(n:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -421,13 +543,26 @@ def wilson(n, acc, conf):
     Parameters
     ----------
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+    
     
     low90, high90 = sm.stats.proportion.proportion_confint(n/2, n, alpha=1-0.90, method = "wilson")
     int90 = [acc-(0.5-low90)*100, acc+(high90-0.5)*100]
@@ -447,7 +582,7 @@ def wilson(n, acc, conf):
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def ztest_pr(n, acc, conf):
+def ztest_pr(n:int, acc:float, conf:float) -> tuple:
     '''
     This test assumes that data is normally distributed and works well for bigger number of samples (>30).
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
@@ -457,13 +592,26 @@ def ztest_pr(n, acc, conf):
     Parameters
     ----------
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set, greater than 0.
     acc : float or int
-        Obtained accuracy. Should be between 0 and 100
-        (as in the percentage scale).
-    conf : float or int
-        Desire confidence level. Should be between 0 and 1.
+        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+    conf : float
+        Desire confidence level. Should be between 0 and 1 -> (0, 1).
     '''
+
+    # Scalling accuracy by *100 as functions were prepared for percentage scale (0-100)
+    acc = acc * 100
+
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between <0, 1>, not \"{acc/100}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+    
     
     z90 = st.norm.ppf(1-(1-0.9)/2)
     pr = z90*math.sqrt(0.25/n)
