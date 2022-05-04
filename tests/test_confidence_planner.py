@@ -31,10 +31,78 @@ from src.confidence_planner.confidence_planner import *
 #             s.split(2)
 
 
-# class TestConfidencePlannerMethods(unittest.TestCase):
+class TestConfidencePlannerMethods(unittest.TestCase):
 
-#     def
+    def test_min_max(self):
+        pass
 
+    def test_min_max_conf(self):
+        pass
+
+
+    def test_clopper_pearson(self):
+
+        with self.assertRaises(Exception):
+            clopper_pearson(n=0, acc=78, conf=0.9)
+
+        with self.assertRaises(Exception):
+            clopper_pearson(n=100, acc=100.0034, conf=0.9)
+        with self.assertRaises(Exception):
+            clopper_pearson(n=57, acc=-0.000432, conf=0.9)
+        
+        with self.assertRaises(Exception):
+            clopper_pearson(n=79, acc=88, conf=0)
+        with self.assertRaises(Exception):
+            clopper_pearson(n=79, acc=88, conf=1)
+        
+
+
+    def test_cv_interval(self):
+        pass
+
+
+    def test_loose_langford_conf(self):
+        pass
+
+
+    def test_loose_langford_reverse(self):
+        pass
+
+
+    def test_loose_langford(self):
+        pass
+
+
+    def test_percentile_BM(self):
+        pass
+
+
+    def test_prog_val(self):
+        pass
+
+
+    def test_reverse_ttest_pr_conf(self):
+        pass
+
+
+    def test_reverse_ztest_pr_conf(self):
+        pass
+
+
+    def test_reverse_ztest_pr(self):
+        pass
+
+
+    def test_ttest_pr(self):
+        pass
+
+
+    def test_wilson(self):
+        pass
+
+
+    def test_ztest_pr(self):
+        pass
 
 
 # if __name__ == '__main__':

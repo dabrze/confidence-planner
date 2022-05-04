@@ -26,7 +26,7 @@ def min_max_conf(conf):
         conf = 1
     return conf
 
-def clopper_pearson(n, acc, conf):
+def clopper_pearson(n:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -35,7 +35,7 @@ def clopper_pearson(n, acc, conf):
     Parameters
     ----------
     n : int
-        Number of samples used in a test set.
+        Number of samples used in a test set greater than 0.
     acc : float or int
         Obtained accuracy. Should be between 0 and 100
         (as in the percentage scale).
@@ -43,6 +43,16 @@ def clopper_pearson(n, acc, conf):
         Desire confidence level. Should be between 0 and 1.
     '''
     
+    # Checking correctness of user input
+    if n <= 0:
+        raise Exception(f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"') 
+    
+    if acc < 0 or acc > 100:
+        raise Exception(f'Accuracy should by between [0, 100], not \"{acc}\"')
+
+    if conf <= 0 or conf >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+
     low90, high90 = sm.stats.proportion.proportion_confint(n/2, n, alpha=1-0.90, method = "beta")
     int90 = [acc-(0.5-low90)*100, acc+(high90-0.5)*100]
     
