@@ -205,7 +205,7 @@ For more examples see examples directory.
 
 ## Online App
 
-Hey! If you don't want to use code, you can check out our confidence-planner web app hosted online
+If you don't want to write code, you can check out our confidence-planner web app hosted online!
 
 https://prediction-confidence-planner.herokuapp.com
 
