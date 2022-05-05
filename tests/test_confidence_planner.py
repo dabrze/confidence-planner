@@ -3,18 +3,14 @@ import os, sys
 import unittest
 
 # Importing confidence planner module:
-
 current = os.path.dirname(os.path.realpath(__file__))
 print(current)
-
 parent = os.path.dirname(current)
 print(parent)
-
 sys.path.append(parent)
+from confidence_planner import *
 
-from src.confidence_planner import *
-
-# Boundare case tests
+# Boundary case tests
 class TestConfidencePlannerMethods(unittest.TestCase):
 
     def test_clopper_pearson(self):
