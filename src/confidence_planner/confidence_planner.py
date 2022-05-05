@@ -13,7 +13,6 @@ def min_max(tup:tuple) -> tuple:
     for i in range(len(tup)):
         tup[i][0] = max(0, tup[i][0])
         tup[i][1] = min(tup[i][1], 100)
-    print('Confidence intervals around given accuracy for your confidence and 90%, 95%, 98%, 99%.')
     return tup
 
 def min_max_conf(conf:float) -> float:
@@ -142,7 +141,7 @@ def cv_interval(n:int, k:int, acc:float, conf:float) -> tuple:
     return min_max((int_conf, int90, int95, int98, int99))
 
 
-def loose_langford_conf(diff:float, n:int) -> float:
+def langford_conf(diff:float, n:int) -> float:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and number of samples (n).
@@ -175,7 +174,7 @@ def loose_langford_conf(diff:float, n:int) -> float:
     return min_max_conf(round(conf, 2))
 
 
-def loose_langford_reverse(diff:float, conf:float) -> int:
+def langford_reverse(diff:float, conf:float) -> int:
     '''
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc 
     or acc-lower_bound (diff) and confidence (conf).
@@ -205,7 +204,7 @@ def loose_langford_reverse(diff:float, conf:float) -> int:
     return int(round(n))
 
 
-def loose_langford(n:int, acc:float, conf:float) -> tuple:
+def langford(n:int, acc:float, conf:float) -> tuple:
     '''
     Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals 
@@ -645,3 +644,46 @@ def ztest_pr(n:int, acc:float, conf:float) -> tuple:
     int_conf = [lower_bound, upper_bound]
     
     return min_max((int_conf, int90, int95, int98, int99))
+
+
+def estimate_confidence_interval(sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"):
+    if method == "holdout_wilson":
+        return wilson(sample_size, accuracy, confidence_level)[0]
+    elif method == "holdout_langford":
+        return langford(sample_size, accuracy, confidence_level)[0]
+    elif method == "holdout_clopper_pearson":
+        return clopper_pearson(sample_size, accuracy, confidence_level)[0]
+    elif method == "holdout_z_test":
+        return ztest_pr(sample_size, accuracy, confidence_level)[0]
+    elif method == "holdout_t_test":
+        return ttest_pr(sample_size, accuracy, confidence_level)[0]
+    elif method == "bootstrap":
+        return percentile_BM(accuracy, confidence_level)[0]
+    elif method == "cv":
+        return cv_interval(sample_size, n_splits, accuracy, confidence_level)[0]
+    elif method == "progressive":
+        return prog_val(sample_size, accuracy, confidence_level)[0]
+    else:
+        raise Exception("Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
+                        "'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test', 'bootstrap', "
+                        "'cv', 'progressive'")
+
+
+def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
+    if method == "z_test":
+        return reverse_ztest_pr(accuracy_radius, confidence_level)
+    elif method == "langford":
+        return langford_reverse(accuracy_radius, confidence_level)
+    else:
+        raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 'langford'")
+
+
+def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
+    if method == "z_test":
+        return reverse_ztest_pr_conf(accuracy_radius, sample_size)
+    if method == "t_test":
+        return reverse_ttest_pr_conf(accuracy_radius, sample_size)
+    elif method == "langford":
+        return langford_conf(accuracy_radius, sample_size)
+    else:
+        raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 't_test', 'langford'")

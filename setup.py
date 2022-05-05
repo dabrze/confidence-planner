@@ -6,7 +6,7 @@ with open("README.md", "r", encoding='UTF8') as fh:
 
 setuptools.setup(
     name="confidence-planner",
-    version="0.0.2",
+    version="0.1.1",
     author="Antoni Klorek, Karol Roszak",
     author_email="antoni.klorek@student.put.poznan.pl",
     description="Python package for calculating confidence interval for model's accuracy",

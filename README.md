@@ -27,7 +27,7 @@ Afterwards you can import `confidence_planner` and use all its functions.
 ```python
 from sklearn import datasets, svm, metrics
 from sklearn.model_selection import train_test_split
-from confidence_planner import confidence_planner as cp
+import confidence_planner as cp
 
 # example dataset
 X, y = datasets.load_breast_cancer(return_X_y=True)
@@ -42,8 +42,8 @@ y_pred = clf.predict(X_test)
 acc = metrics.accuracy_score(y_test, y_pred)
 
 # confidence interval and sample size estimation
-ci = cp.loose_langford(y_test.shape[0], acc, 0.90)
-sample = cp.loose_langford_reverse(0.05, 0.90)
+ci = cp.estimate_confidence_interval(y_test.shape[0], acc, confidence_level=0.90)
+sample = cp.estimate_sample_size(accuracy_radius=0.05, confidence_level=0.90)
 print(f"90% CI: {ci}")
 print(f"Samples needed for a 0.05 radius 90% CI: {sample}")
 ```
@@ -51,6 +51,8 @@ print(f"Samples needed for a 0.05 radius 90% CI: {sample}")
 More code examples (including cross-validation and bootstrapping) can be found in the `examples` folder.
 
 ## References
+
+Confidence-planner methods belong to the field of frequentist statistics.
 
 [1] Langford, J.: Tutorial on practical prediction theory for classification. 
 Journal of Machine Learnining Research 6, 273–306 (2005).
