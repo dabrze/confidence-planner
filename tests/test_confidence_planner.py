@@ -10,55 +10,64 @@ print(parent)
 sys.path.append(parent)
 from confidence_planner import *
 
+
 # Boundary case tests
 class TestConfidencePlannerMethods(unittest.TestCase):
 
     def test_clopper_pearson(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            clopper_pearson(n=0, acc=0.78, conf=0.9)
+            clopper_pearson(sample_size=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            clopper_pearson(n=100, acc=1.0034, conf=0.9)
+            clopper_pearson(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            clopper_pearson(n=57, acc=-0.000432, conf=0.9)
+            clopper_pearson(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            clopper_pearson(n=79, acc=0.88, conf=0)
+            clopper_pearson(sample_size=79, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            clopper_pearson(n=79, acc=0.88, conf=1)
+            clopper_pearson(sample_size=79, accuracy=0.88, confidence_level=1)
            
         # should not raise exception
-        clopper_pearson(55, 0.80, 0.9)
-        
+        ci = clopper_pearson(555, 0.80, 0.90)
+        self.assertGreaterEqual(ci[0], 0.0)
+        self.assertLessEqual(ci[1], 1.0)
+
+        self.assertEqual(ci[0], 0.7642507155996638)
+        self.assertEqual(ci[1], 0.8357492844003362)
 
 
     def test_cv_interval(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            cv_interval(n=0, k=10, acc=0.78, conf=0.9)
+            cv_interval(n=0, n_splits=10, accuracy=0.78, confidence_level=0.9)
 
         # number of folds out of bounds
         with self.assertRaises(Exception):
-            cv_interval(n=453, k=0, acc=0.78, conf=0.9)
+            cv_interval(n=453, n_splits=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            cv_interval(n=100, k=10, acc=1.0034, conf=0.9)
+            cv_interval(n=100, n_splits=10, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            cv_interval(n=57, k=10, acc=-0.000432, conf=0.9)
+            cv_interval(n=57, n_splits=10, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            cv_interval(n=79, k=10, acc=0.88, conf=0)
+            cv_interval(n=79, n_splits=10, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            cv_interval(n=79, k=10, acc=0.88, conf=1)
+            cv_interval(n=79, n_splits=10, accuracy=0.88, confidence_level=1)
            
         # should not raise exception
-        cv_interval(888, 7, 0.8, 0.88)
+        ci = cv_interval(888, 7, 0.8, 0.88)
+        self.assertGreaterEqual(ci[0], 0.0)
+        self.assertLessEqual(ci[1], 1.0)
 
+        self.assertEqual(ci[0], 0.6946961843481754)
+        self.assertEqual(ci[1], 0.9053038156518247)
 
     def test_loose_langford_conf(self):
         # number of samples out of bounds
@@ -92,39 +101,44 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         langford_reverse(0.15, 0.9)
 
 
-    def test_loose_langford(self):
+    def test_langford(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            langford(n=0, acc=0.78, conf=0.9)
+            langford(sample_size=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            langford(n=100, acc=1.0034, conf=0.9)
+            langford(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            langford(n=57, acc=-0.000432, conf=0.9)
+            langford(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            langford(n=79, acc=0.88, conf=0)
+            langford(sample_size=79, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            langford(n=79, acc=0.88, conf=1)
+            langford(sample_size=79, accuracy=0.88, confidence_level=1)
            
         # should not raise exception
-        langford(100, 0.8, 0.77)
+        ci = langford(555, 0.80, 0.90)
+        self.assertGreaterEqual(ci[0], 0.0)
+        self.assertLessEqual(ci[1], 1.0)
+
+        self.assertEqual(ci[0], 0.748049466758245)
+        self.assertEqual(ci[1], 0.8519505332417551)
 
 
     def test_percentile_BM(self):
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            percentile_BM(accs=[0.88, 1.08, 0.68, 0.79], conf=0.9)
+            percentile_BM(accuracies=[0.88, 1.08, 0.68, 0.79], confidence_level=0.9)
         with self.assertRaises(Exception):
-            percentile_BM(accs=[0.88, 0.54, 0.68, -0.07], conf=0.9)
+            percentile_BM(accuracies=[0.88, 0.54, 0.68, -0.07], confidence_level=0.9)
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            percentile_BM(accs=[0.88, 0.77, 0.68, 0.79], conf=0)
+            percentile_BM(accuracies=[0.88, 0.77, 0.68, 0.79], confidence_level=0)
         with self.assertRaises(Exception):
-            percentile_BM(accs=[0.88, 0.77, 0.68, 0.79], conf=1)
+            percentile_BM(accuracies=[0.88, 0.77, 0.68, 0.79], confidence_level=1)
            
         # should not raise exception
         percentile_BM([0.8, 0.77, 0.9, 0.87, 0.7], 0.9)
@@ -267,35 +281,35 @@ class TestConfidencePlannerMethods(unittest.TestCase):
 
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_z_test"),
-            ztest_pr(300, 0.75, 0.90)[0]
+            ztest_pr(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_t_test"),
-            ttest_pr(300, 0.75, 0.90)[0]
+            ttest_pr(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_langford"),
-            langford(300, 0.75, 0.90)[0]
+            langford(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_wilson"),
-            wilson(300, 0.75, 0.90)[0]
+            wilson(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_clopper_pearson"),
-            clopper_pearson(300, 0.75, 0.90)[0]
+            clopper_pearson(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, [0.88, 0.9, 0.68, 0.79], 0.90, method="bootstrap"),
-            percentile_BM([0.88, 0.9, 0.68, 0.79], 0.90)[0]
+            percentile_BM([0.88, 0.9, 0.68, 0.79], 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="cv", n_splits=5),
-            cv_interval(n=300, k=5, acc=0.75, conf=0.90)[0]
+            cv_interval(n=300, n_splits=5, accuracy=0.75, confidence_level=0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="progressive"),
-            prog_val(300, 0.75, 0.90)[0]
+            prog_val(300, 0.75, 0.90)
         )
 
 
