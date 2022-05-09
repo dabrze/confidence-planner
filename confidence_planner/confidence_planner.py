@@ -215,8 +215,8 @@ def percentile_BM(accuracies:list, confidence_level:float) -> tuple:
     if confidence_level <= 0 or confidence_level >= 1:
         raise Exception(f'Confidence level should be between (0, 1), not \"{confidence_level}\"')
 
-    lower_bound = np.percentile(accuracies, ((1 - confidence_level) / 2))
-    upper_bound = np.percentile(accuracies, (confidence_level + (1 - confidence_level) / 2))
+    lower_bound = np.percentile(accuracies, 100*((1 - confidence_level) / 2))
+    upper_bound = np.percentile(accuracies, 100*(confidence_level + (1 - confidence_level) / 2))
     int_conf = [lower_bound, upper_bound]
     return min_max(int_conf)
 
