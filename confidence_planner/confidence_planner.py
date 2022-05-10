@@ -33,13 +33,14 @@ def _check_n_acc_conf(n: int, acc: float, conf: float):
     """
     if n <= 0:
         raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"')
+            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
+        )
 
     if acc < 0.0 or acc > 1.0:
-        raise Exception(f'Accuracy should by between <0, 1>, not {acc}')
+        raise Exception(f"Accuracy should by between <0, 1>, not {acc}")
 
     if conf <= 0.0 or conf >= 1.0:
-        raise Exception(f'Confidence level should be between (0, 1), not {conf}')
+        raise Exception(f"Confidence level should be between (0, 1), not {conf}")
 
 
 def cap(low, high):
@@ -48,6 +49,7 @@ def cap(low, high):
         def cap_result(*args, **kwargs):
             value = f(*args, **kwargs)
             return _min_max(value, low, high)
+
         return cap_result
 
     return wrapper
@@ -71,7 +73,9 @@ def wilson(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
-    low, high = proportion_confint(sample_size / 2, sample_size, alpha=1 - confidence_level, method="wilson")
+    low, high = proportion_confint(
+        sample_size / 2, sample_size, alpha=1 - confidence_level, method="wilson"
+    )
     int_conf = [accuracy - (0.5 - low), accuracy + (high - 0.5)]
     return int_conf
 
@@ -93,7 +97,9 @@ def clopper_pearson(sample_size: int, accuracy: float, confidence_level: float) 
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
-    low, high = proportion_confint(sample_size / 2, sample_size, alpha=1 - confidence_level, method="beta")
+    low, high = proportion_confint(
+        sample_size / 2, sample_size, alpha=1 - confidence_level, method="beta"
+    )
     int_conf = [accuracy - (0.5 - low), accuracy + (high - 0.5)]
     return int_conf
 
@@ -175,7 +181,9 @@ def t_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
 
 
 @cap(low=0.0, high=1.0)
-def cv_interval(sample_size: int, n_splits: int, accuracy: float, confidence_level: float) -> list:
+def cv_interval(
+    sample_size: int, n_splits: int, accuracy: float, confidence_level: float
+) -> list:
     """
     Returns confidence interval for the given confidence level for mean CV results, based on
     the number of samples in the CV, number of splits, obtained accuracy, and desired confidence level.
@@ -194,8 +202,10 @@ def cv_interval(sample_size: int, n_splits: int, accuracy: float, confidence_lev
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
     if n_splits <= 0:
-        raise Exception(f'Number of folds must be a natural number -> whole, positive and greater '
-                        f'than 0, not \"{sample_size}\"')
+        raise Exception(
+            f"Number of folds must be a natural number -> whole, positive and greater "
+            f'than 0, not "{sample_size}"'
+        )
 
     x = math.log((1 - confidence_level) / 2) * n_splits / 2 / sample_size
     t = math.sqrt(-x)
@@ -225,19 +235,27 @@ def percentiles(accuracies: list, confidence_level: float) -> list:
 
     # Checking correctness of user input
     if np.any(accuracies < 0) or np.any(accuracies > 1):
-        raise Exception(f'Each accuracy should by between <0, 1>, some is outside these boundaries')
+        raise Exception(
+            f"Each accuracy should by between <0, 1>, some is outside these boundaries"
+        )
 
     if confidence_level <= 0 or confidence_level >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not \"{confidence_level}\"')
+        raise Exception(
+            f'Confidence level should be between (0, 1), not "{confidence_level}"'
+        )
 
     lower_bound = np.percentile(accuracies, 100 * ((1 - confidence_level) / 2))
-    upper_bound = np.percentile(accuracies, 100 * (confidence_level + (1 - confidence_level) / 2))
+    upper_bound = np.percentile(
+        accuracies, 100 * (confidence_level + (1 - confidence_level) / 2)
+    )
     int_conf = [lower_bound, upper_bound]
     return int_conf
 
 
 @cap(low=0.0, high=1.0)
-def progressive_validation(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def progressive_validation(
+    sample_size: int, accuracy: float, confidence_level: float
+) -> list:
     """
     Returns a confidence interval for progressive validation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -285,10 +303,11 @@ def langford_confidence_level(diff: float, n: int) -> float:
     # Checking correctness of user input
     if n <= 0:
         raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"')
+            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
+        )
 
     if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not \"{diff / 100}\"')
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     pr2 = (diff / 100) ** 2
     expnt = math.exp(2 * n * pr2)
@@ -318,10 +337,10 @@ def langford_sample_size(diff: float, conf: float) -> int:
 
     # Checking correctness of user input
     if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not \"{diff / 100}\"')
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     if conf <= 0 or conf >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+        raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
 
     n = math.log(2 / (1 - conf)) / (2 * (diff / 100) ** 2)
     return int(round(n))
@@ -350,10 +369,11 @@ def t_test_confidence_level(diff: float, n: int) -> float:
     # Checking correctness of user input
     if n <= 0:
         raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"')
+            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
+        )
 
     if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not \"{diff / 100}\"')
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     pr = diff / 100
     t = pr / math.sqrt(0.25 / n)
@@ -384,10 +404,11 @@ def z_test_confidence_level(diff: float, n: int) -> float:
     # Checking correctness of user input
     if n <= 0:
         raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not \"{n}\"')
+            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
+        )
 
     if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not \"{diff / 100}\"')
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     z = (math.sqrt(n) * diff) / 50
     conf = 2 * st.norm.cdf(z) - 1
@@ -415,17 +436,19 @@ def z_test_sample_size(diff: float, conf: float) -> int:
 
     # Checking correctness of user input
     if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not \"{diff / 100}\"')
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     if conf <= 0 or conf >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not \"{conf}\"')
+        raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
 
     z = st.norm.ppf(1 - (1 - conf) / 2)
     n = (z * math.sqrt(0.25) / (diff / 100)) ** 2
     return int(round(n))
 
 
-def estimate_confidence_interval(sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"):
+def estimate_confidence_interval(
+    sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"
+):
     if method == "holdout_wilson":
         return wilson(sample_size, accuracy, confidence_level)
     elif method == "holdout_langford":
@@ -443,9 +466,11 @@ def estimate_confidence_interval(sample_size, accuracy, confidence_level, n_spli
     elif method == "progressive":
         return progressive_validation(sample_size, accuracy, confidence_level)
     else:
-        raise Exception("Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
-                        "'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test', 'bootstrap', "
-                        "'cv', 'progressive'")
+        raise Exception(
+            "Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
+            "'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test', 'bootstrap', "
+            "'cv', 'progressive'"
+        )
 
 
 def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
@@ -454,7 +479,9 @@ def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
     elif method == "langford":
         return langford_sample_size(accuracy_radius, confidence_level)
     else:
-        raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 'langford'")
+        raise Exception(
+            "Unknown sample size estimation method. Should be one of: 'z_test', 'langford'"
+        )
 
 
 def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
@@ -465,4 +492,6 @@ def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
     elif method == "langford":
         return langford_confidence_level(accuracy_radius, sample_size)
     else:
-        raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 't_test', 'langford'")
+        raise Exception(
+            "Unknown sample size estimation method. Should be one of: 'z_test', 't_test', 'langford'"
+        )
