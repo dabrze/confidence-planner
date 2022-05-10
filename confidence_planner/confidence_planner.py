@@ -79,20 +79,18 @@ def wilson(sample_size: int, accuracy: float, confidence_level: float) -> list:
 @cap(low=0.0, high=1.0)
 def clopper_pearson(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    Returns confidence interval for the given confidence level according to the Clopper-Pearson method, based on
-    the number of holdout test samples, obtained accuracy, and desired confidence level.
+    Returns a confidence interval according to the Clopper-Pearson approximation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples used in a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desired confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
-
-    # Checking correctness of user input
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
     low, high = proportion_confint(sample_size / 2, sample_size, alpha=1 - confidence_level, method="beta")
@@ -103,20 +101,18 @@ def clopper_pearson(sample_size: int, accuracy: float, confidence_level: float) 
 @cap(low=0.0, high=1.0)
 def langford(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    Returns confidence interval for the given confidence level according to the Clopper-Pearson method, based on
-    the number of holdout test samples, obtained accuracy, and desired confidence level.
+    Returns a confidence interval according to Langford's approximation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples used in a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
-
-    # Checking correctness of user input
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
     pr = math.sqrt(math.log(2 / (1 - confidence_level)) / (sample_size * 2))
@@ -127,21 +123,19 @@ def langford(sample_size: int, accuracy: float, confidence_level: float) -> list
 
 
 @cap(low=0.0, high=1.0)
-def ztest_pr(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def z_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    This test assumes that data is normally distributed and works well for bigger number of samples (>30).
-    Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
-    Returns confidence interval for the given confidence as well as confidence intervals
-    for 90%, 95%, 98% and 99% confidences.
+    Returns a confidence interval the Z-test (normal distribution) approximation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples used in a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
@@ -155,21 +149,19 @@ def ztest_pr(sample_size: int, accuracy: float, confidence_level: float) -> list
 
 
 @cap(low=0.0, high=1.0)
-def ttest_pr(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def t_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    This test works for smaller number of samples (<30), uses t-distribution.
-    Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
-    Returns confidence interval for the given confidence as well as confidence intervals
-    for 90%, 95%, 98% and 99% confidences.
+    Returns a confidence interval the t-test approximation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples used in a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
@@ -194,14 +186,12 @@ def cv_interval(sample_size: int, n_splits: int, accuracy: float, confidence_lev
         Number of all samples used from the dataset, greater than 0.
     n_splits : int
         Number of folds used in cross validation, greater than 0.
-    accuracy : float or int
-        Obtained accuracy - final accuracy, e.g. average of all accuracies from each fold.
-        Should be between 0 and 1 -> <0, 1>.
+    accuracy : float
+        Obtained accuracy - mean of all accuracies from each fold.
+        Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desire confidence level. Should be between 0 and 1.
     """
-
-    # Checking correctness of user input
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
     if n_splits <= 0:
         raise Exception(f'Number of folds must be a natural number -> whole, positive and greater '
@@ -247,20 +237,19 @@ def percentiles(accuracies: list, confidence_level: float) -> list:
 
 
 @cap(low=0.0, high=1.0)
-def prog_val(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def progressive_validation(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    Function takes number of samples from a test set (s), obtained accuracy (acc) and confidence (conf).
-    Returns confidence interval for the given confidence as well as confidence intervals
-    for 90%, 95%, 98% and 99% confidences.
+    Returns a confidence interval for progressive validation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples from a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
@@ -274,7 +263,7 @@ def prog_val(sample_size: int, accuracy: float, confidence_level: float) -> list
 
 
 @cap(low=0.0, high=1.0)
-def langford_conf(diff: float, n: int) -> float:
+def langford_confidence_level(diff: float, n: int) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -308,7 +297,7 @@ def langford_conf(diff: float, n: int) -> float:
     return conf
 
 
-def langford_reverse(diff: float, conf: float) -> int:
+def langford_sample_size(diff: float, conf: float) -> int:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and confidence (conf).
@@ -339,7 +328,7 @@ def langford_reverse(diff: float, conf: float) -> int:
 
 
 @cap(low=0.0, high=1.0)
-def reverse_ttest_pr_conf(diff: float, n: int) -> float:
+def t_test_confidence_level(diff: float, n: int) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -373,7 +362,7 @@ def reverse_ttest_pr_conf(diff: float, n: int) -> float:
 
 
 @cap(low=0.0, high=1.0)
-def reverse_ztest_pr_conf(diff: float, n: int) -> float:
+def z_test_confidence_level(diff: float, n: int) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -404,7 +393,8 @@ def reverse_ztest_pr_conf(diff: float, n: int) -> float:
     conf = 2 * st.norm.cdf(z) - 1
     return conf
 
-def reverse_ztest_pr(diff: float, conf: float) -> int:
+
+def z_test_sample_size(diff: float, conf: float) -> int:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and confidence (conf).
@@ -443,15 +433,15 @@ def estimate_confidence_interval(sample_size, accuracy, confidence_level, n_spli
     elif method == "holdout_clopper_pearson":
         return clopper_pearson(sample_size, accuracy, confidence_level)
     elif method == "holdout_z_test":
-        return ztest_pr(sample_size, accuracy, confidence_level)
+        return z_test(sample_size, accuracy, confidence_level)
     elif method == "holdout_t_test":
-        return ttest_pr(sample_size, accuracy, confidence_level)
+        return t_test(sample_size, accuracy, confidence_level)
     elif method == "bootstrap":
         return percentiles(accuracy, confidence_level)
     elif method == "cv":
         return cv_interval(sample_size, n_splits, accuracy, confidence_level)
     elif method == "progressive":
-        return prog_val(sample_size, accuracy, confidence_level)
+        return progressive_validation(sample_size, accuracy, confidence_level)
     else:
         raise Exception("Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
                         "'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test', 'bootstrap', "
@@ -460,19 +450,19 @@ def estimate_confidence_interval(sample_size, accuracy, confidence_level, n_spli
 
 def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
     if method == "z_test":
-        return reverse_ztest_pr(accuracy_radius, confidence_level)
+        return z_test_sample_size(accuracy_radius, confidence_level)
     elif method == "langford":
-        return langford_reverse(accuracy_radius, confidence_level)
+        return langford_sample_size(accuracy_radius, confidence_level)
     else:
         raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 'langford'")
 
 
 def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
     if method == "z_test":
-        return reverse_ztest_pr_conf(accuracy_radius, sample_size)
+        return z_test_confidence_level(accuracy_radius, sample_size)
     if method == "t_test":
-        return reverse_ttest_pr_conf(accuracy_radius, sample_size)
+        return t_test_confidence_level(accuracy_radius, sample_size)
     elif method == "langford":
-        return langford_conf(accuracy_radius, sample_size)
+        return langford_confidence_level(accuracy_radius, sample_size)
     else:
         raise Exception("Unknown sample size estimation method. Should be one of: 'z_test', 't_test', 'langford'")

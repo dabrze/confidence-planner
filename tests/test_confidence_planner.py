@@ -88,30 +88,30 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_loose_langford_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            langford_conf(diff=0.1, n=0)
+            langford_confidence_level(diff=0.1, n=0)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            langford_conf(diff=-0.00948, n=100)
+            langford_confidence_level(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
-            langford_conf(diff=1.03421, n=100)
+            langford_confidence_level(diff=1.03421, n=100)
 
-        langford_conf(0.1, 200)
+        langford_confidence_level(0.1, 200)
 
     def test_loose_langford_reverse(self):
         # Difference out of bounds
         with self.assertRaises(Exception):
-            langford_reverse(diff=-0.00948, conf=0.9)
+            langford_sample_size(diff=-0.00948, conf=0.9)
         with self.assertRaises(Exception):
-            langford_reverse(diff=1.03421, conf=0.9)
+            langford_sample_size(diff=1.03421, conf=0.9)
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            langford_reverse(diff=0.1, conf=0)
+            langford_sample_size(diff=0.1, conf=0)
         with self.assertRaises(Exception):
-            langford_reverse(diff=0.1, conf=1)
+            langford_sample_size(diff=0.1, conf=1)
 
-        langford_reverse(0.15, 0.9)
+        langford_sample_size(0.15, 0.9)
 
     def test_langford(self):
         # number of samples out of bounds
@@ -174,21 +174,21 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_prog_val(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            prog_val(sample_size=0, accuracy=0.78, confidence_level=0.9)
+            progressive_validation(sample_size=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            prog_val(sample_size=100, accuracy=1.0034, confidence_level=0.9)
+            progressive_validation(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            prog_val(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
+            progressive_validation(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            prog_val(sample_size=79, accuracy=0.88, confidence_level=0)
+            progressive_validation(sample_size=79, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            prog_val(sample_size=79, accuracy=0.88, confidence_level=1)
+            progressive_validation(sample_size=79, accuracy=0.88, confidence_level=1)
 
-        ci = prog_val(100, 0.9, 0.7)
+        ci = progressive_validation(100, 0.9, 0.7)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
         self.assertLessEqual(ci[0], 0.9)
@@ -197,75 +197,75 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         self.assertEqual(ci[0], 0.8026059553954689)
         self.assertEqual(ci[1], 0.9973940446045312)
 
-        ci = prog_val(100, 0.02, 0.90)
+        ci = progressive_validation(100, 0.02, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
-        ci = prog_val(100, 0.98, 0.90)
+        ci = progressive_validation(100, 0.98, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
     def test_reverse_ttest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            reverse_ttest_pr_conf(diff=0.1, n=0)
+            t_test_confidence_level(diff=0.1, n=0)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            reverse_ttest_pr_conf(diff=-0.00948, n=100)
+            t_test_confidence_level(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
-            reverse_ttest_pr_conf(diff=1.03421, n=100)
+            t_test_confidence_level(diff=1.03421, n=100)
 
-        reverse_ttest_pr_conf(0.09, 321)
+        t_test_confidence_level(0.09, 321)
 
     def test_reverse_ztest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            reverse_ztest_pr_conf(diff=0.1, n=0)
+            z_test_confidence_level(diff=0.1, n=0)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            reverse_ztest_pr_conf(diff=-0.00948, n=100)
+            z_test_confidence_level(diff=-0.00948, n=100)
         with self.assertRaises(Exception):
-            reverse_ztest_pr_conf(diff=1.03421, n=100)
+            z_test_confidence_level(diff=1.03421, n=100)
            
         # should not raise exception
-        reverse_ztest_pr_conf(0.2, 82)
+        z_test_confidence_level(0.2, 82)
 
     def test_reverse_ztest_pr(self):
         # Difference out of bounds
         with self.assertRaises(Exception):
-            reverse_ztest_pr(diff=-0.00948, conf=0.9)
+            z_test_sample_size(diff=-0.00948, conf=0.9)
         with self.assertRaises(Exception):
-            reverse_ztest_pr(diff=1.03421, conf=0.9)
+            z_test_sample_size(diff=1.03421, conf=0.9)
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            reverse_ztest_pr(diff=0.1, conf=0)
+            z_test_sample_size(diff=0.1, conf=0)
         with self.assertRaises(Exception):
-            reverse_ztest_pr(diff=0.1, conf=1)
+            z_test_sample_size(diff=0.1, conf=1)
            
         # should not raise exception
-        reverse_ztest_pr(0.08, 0.9)
+        z_test_sample_size(0.08, 0.9)
 
     def test_ttest_pr(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            ttest_pr(sample_size=0, accuracy=0.78, confidence_level=0.9)
+            t_test(sample_size=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            ttest_pr(sample_size=100, accuracy=1.0034, confidence_level=0.9)
+            t_test(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            ttest_pr(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
+            t_test(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            ttest_pr(sample_size=79, accuracy=0.88, confidence_level=0)
+            t_test(sample_size=79, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            ttest_pr(sample_size=79, accuracy=0.88, confidence_level=1)
+            t_test(sample_size=79, accuracy=0.88, confidence_level=1)
 
-        ci = ttest_pr(100, 0.7, 0.88)
+        ci = t_test(100, 0.7, 0.88)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
         self.assertLessEqual(ci[0], 0.7)
@@ -274,11 +274,11 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         self.assertEqual(ci[0], 0.6215845716640249)
         self.assertEqual(ci[1], 0.778415428335975)
 
-        ci = ttest_pr(100, 0.02, 0.90)
+        ci = t_test(100, 0.02, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
-        ci = ttest_pr(100, 0.98, 0.90)
+        ci = t_test(100, 0.98, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
@@ -319,21 +319,21 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_ztest_pr(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            ztest_pr(sample_size=0, accuracy=0.78, confidence_level=0.9)
+            z_test(sample_size=0, accuracy=0.78, confidence_level=0.9)
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            ztest_pr(sample_size=100, accuracy=1.0034, confidence_level=0.9)
+            z_test(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
-            ztest_pr(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
+            z_test(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
         
         # confidence out of bounds
         with self.assertRaises(Exception):
-            ztest_pr(sample_size=79, accuracy=0.88, confidence_level=0)
+            z_test(sample_size=79, accuracy=0.88, confidence_level=0)
         with self.assertRaises(Exception):
-            ztest_pr(sample_size=79, accuracy=0.88, confidence_level=1)
+            z_test(sample_size=79, accuracy=0.88, confidence_level=1)
 
-        ci = ztest_pr(321, 0.8, 0.9)
+        ci = z_test(321, 0.8, 0.9)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
         self.assertLessEqual(ci[0], 0.8)
@@ -342,11 +342,11 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         self.assertEqual(ci[0], 0.754096611561152)
         self.assertEqual(ci[1], 0.845903388438848)
 
-        ci = ztest_pr(100, 0.02, 0.90)
+        ci = z_test(100, 0.02, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
-        ci = ztest_pr(100, 0.98, 0.90)
+        ci = z_test(100, 0.98, 0.90)
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
@@ -356,11 +356,11 @@ class TestConfidencePlannerMethods(unittest.TestCase):
 
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_z_test"),
-            ztest_pr(300, 0.75, 0.90)
+            z_test(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_t_test"),
-            ttest_pr(300, 0.75, 0.90)
+            t_test(300, 0.75, 0.90)
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="holdout_langford"),
@@ -384,5 +384,5 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         )
         self.assertEqual(
             estimate_confidence_interval(300, 0.75, 0.90, method="progressive"),
-            prog_val(300, 0.75, 0.90)
+            progressive_validation(300, 0.75, 0.90)
         )
