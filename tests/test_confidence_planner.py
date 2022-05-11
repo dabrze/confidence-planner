@@ -1,8 +1,6 @@
 import os, sys
 import unittest
 
-from nltk.metrics.aline import delta
-
 current = os.path.dirname(os.path.realpath(__file__))
 print(current)
 parent = os.path.dirname(current)
