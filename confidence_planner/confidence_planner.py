@@ -485,13 +485,13 @@ def estimate_confidence_interval(
         )
 
 
-def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
+def estimate_sample_size(accuracy_radius, confidence_level, method="z_test", n_splits=1):
     if method == "holdout_z_test" or method == "bootstrap":
         return z_test_sample_size(accuracy_radius, confidence_level)
     elif method == "holdout_langford":
         return langford_sample_size(accuracy_radius, confidence_level)
     elif method == "cv":
-        return cross_validation_sample_size(accuracy_radius, confidence_level)
+        return cross_validation_sample_size(accuracy_radius, confidence_level, n_splits)
     else:
         raise Exception(
             "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_langford', 'cv',"
