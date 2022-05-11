@@ -15,8 +15,9 @@ def _min_max(value, low: float = 0.0, high: float = 1.0) -> list:
     :return: capped inteval
     """
     if isinstance(value, list):
-        value[0] = max(low, value[0])
-        value[1] = min(value[1], high)
+        assert value[0] <= value[1]
+        value[0] = min(max(low, value[0]), high)
+        value[1] = min(max(low, value[1]), high)
     else:
         value = max(low, value)
         value = min(value, high)
@@ -56,32 +57,31 @@ def cap(low, high):
 
 
 @cap(low=0.0, high=1.0)
-def wilson(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def wilson_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
-    Function takes number of samples (n), obtained accuracy (acc) and confidence (conf).
-    Returns confidence interval for the given confidence as well as confidence intervals
-    for 90%, 95%, 98% and 99% confidences.
+    Returns a confidence interval according to the Wilson approximation, based on the number of holdout
+    test samples, obtained accuracy, and desired confidence level.
 
     Parameters
     ----------
     sample_size : int
-        Number of samples used in a test set, greater than 0.
-    accuracy : float or int
-        Obtained accuracy. Should be between 0 and 1 -> <0, 1>.
+        Number of samples used in a test set.
+    accuracy : float
+        Accuracy obtained on the test set. Should be between 0 and 1.
     confidence_level : float
-        Desire confidence level. Should be between 0 and 1 -> (0, 1).
+        Desired confidence level. Should be between 0 and 1.
     """
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
     low, high = proportion_confint(
-        sample_size / 2, sample_size, alpha=1 - confidence_level, method="wilson"
+        accuracy * sample_size, sample_size, alpha=1 - confidence_level, method="wilson"
     )
-    int_conf = [accuracy - (0.5 - low), accuracy + (high - 0.5)]
+    int_conf = [low, high]
     return int_conf
 
 
 @cap(low=0.0, high=1.0)
-def clopper_pearson(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def clopper_pearson_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
     Returns a confidence interval according to the Clopper-Pearson approximation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -98,14 +98,14 @@ def clopper_pearson(sample_size: int, accuracy: float, confidence_level: float) 
     _check_n_acc_conf(sample_size, accuracy, confidence_level)
 
     low, high = proportion_confint(
-        sample_size / 2, sample_size, alpha=1 - confidence_level, method="beta"
+        accuracy * sample_size, sample_size, alpha=1 - confidence_level, method="beta"
     )
-    int_conf = [accuracy - (0.5 - low), accuracy + (high - 0.5)]
+    int_conf = [low, high]
     return int_conf
 
 
 @cap(low=0.0, high=1.0)
-def langford(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def langford_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
     Returns a confidence interval according to Langford's approximation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -125,11 +125,12 @@ def langford(sample_size: int, accuracy: float, confidence_level: float) -> list
     upper_bound = accuracy + pr
     lower_bound = accuracy - pr
     int_conf = [lower_bound, upper_bound]
+
     return int_conf
 
 
 @cap(low=0.0, high=1.0)
-def z_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def z_test_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
     Returns a confidence interval the Z-test (normal distribution) approximation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -155,7 +156,7 @@ def z_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
 
 
 @cap(low=0.0, high=1.0)
-def t_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def t_test_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
     """
     Returns a confidence interval the t-test approximation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -181,7 +182,7 @@ def t_test(sample_size: int, accuracy: float, confidence_level: float) -> list:
 
 
 @cap(low=0.0, high=1.0)
-def cv_interval(
+def cross_validation_ci(
     sample_size: int, n_splits: int, accuracy: float, confidence_level: float
 ) -> list:
     """
@@ -217,7 +218,7 @@ def cv_interval(
 
 
 @cap(low=0.0, high=1.0)
-def percentiles(accuracies: list, confidence_level: float) -> list:
+def percentiles_ci(accuracies: list, confidence_level: float) -> list:
     """
     Function takes list of resamples accuracies obtained from bootstrap method(accs) and confidence (conf).
     Returns confidence interval for the given confidence as well as confidence intervals
@@ -253,7 +254,7 @@ def percentiles(accuracies: list, confidence_level: float) -> list:
 
 
 @cap(low=0.0, high=1.0)
-def progressive_validation(
+def progressive_validation_ci(
     sample_size: int, accuracy: float, confidence_level: float
 ) -> list:
     """
@@ -343,7 +344,33 @@ def langford_sample_size(diff: float, conf: float) -> int:
         raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
 
     n = math.log(2 / (1 - conf)) / (2 * (diff / 100) ** 2)
-    return int(round(n))
+    return math.ceil(n)
+
+
+def cross_validation_sample_size(diff: float, confidence_level: float, n_splits: int) -> int:
+    """
+    Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
+    or acc-lower_bound (diff) and confidence (conf).
+    Returns rounded number of samples which should be taken to obtain a given confidence interval.
+
+    Parameters
+    ----------
+    diff : float or int
+        Difference from accuracy to lower/upper bound of a confidence interval,
+        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
+        Should be between 0 and 1 -> <0, 1>.
+    confidence_level : float
+        Confidence. Should be between 0 and 1 -> (0, 1).
+    """
+    if diff < 0 or diff > 1:
+        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
+
+    if confidence_level <= 0 or confidence_level >= 1:
+        raise Exception(f'Confidence level should be between (0, 1), not "{confidence_level}"')
+
+    n = -math.log((1 - confidence_level) / 2) * n_splits / 2 / (diff ** 2)
+
+    return math.ceil(n)
 
 
 @cap(low=0.0, high=1.0)
@@ -435,36 +462,38 @@ def z_test_sample_size(diff: float, conf: float) -> int:
     diff = diff * 100
 
     # Checking correctness of user input
+    # todo diff max 50...
     if diff < 0 or diff > 100:
         raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
 
     if conf <= 0 or conf >= 1:
         raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
 
+
     z = st.norm.ppf(1 - (1 - conf) / 2)
     n = (z * math.sqrt(0.25) / (diff / 100)) ** 2
-    return int(round(n))
+    return math.ceil(n)
 
 
 def estimate_confidence_interval(
     sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"
 ):
     if method == "holdout_wilson":
-        return wilson(sample_size, accuracy, confidence_level)
+        return wilson_ci(sample_size, accuracy, confidence_level)
     elif method == "holdout_langford":
-        return langford(sample_size, accuracy, confidence_level)
+        return langford_ci(sample_size, accuracy, confidence_level)
     elif method == "holdout_clopper_pearson":
-        return clopper_pearson(sample_size, accuracy, confidence_level)
+        return clopper_pearson_ci(sample_size, accuracy, confidence_level)
     elif method == "holdout_z_test":
-        return z_test(sample_size, accuracy, confidence_level)
+        return z_test_ci(sample_size, accuracy, confidence_level)
     elif method == "holdout_t_test":
-        return t_test(sample_size, accuracy, confidence_level)
+        return t_test_ci(sample_size, accuracy, confidence_level)
     elif method == "bootstrap":
-        return percentiles(accuracy, confidence_level)
+        return percentiles_ci(accuracy, confidence_level)
     elif method == "cv":
-        return cv_interval(sample_size, n_splits, accuracy, confidence_level)
+        return cross_validation_ci(sample_size, n_splits, accuracy, confidence_level)
     elif method == "progressive":
-        return progressive_validation(sample_size, accuracy, confidence_level)
+        return progressive_validation_ci(sample_size, accuracy, confidence_level)
     else:
         raise Exception(
             "Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
