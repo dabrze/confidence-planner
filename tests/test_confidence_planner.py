@@ -88,15 +88,15 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_loose_langford_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            langford_confidence_level(diff=0.1, n=0)
+            langford_confidence_level(sample_size=0, radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            langford_confidence_level(diff=-0.00948, n=100)
+            langford_confidence_level(sample_size=100, radius=-0.00948)
         with self.assertRaises(Exception):
-            langford_confidence_level(diff=1.03421, n=100)
+            langford_confidence_level(sample_size=100, radius=1.03421)
 
-        langford_confidence_level(0.1, 200)
+        langford_confidence_level(200, 0.1)
 
     def test_loose_langford_reverse(self):
         # Difference out of bounds
@@ -208,29 +208,29 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_reverse_ttest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            t_test_confidence_level(diff=0.1, n=0)
+            t_test_confidence_level(sample_size=0, radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            t_test_confidence_level(diff=-0.00948, n=100)
+            t_test_confidence_level(sample_size=100, radius=-0.00948)
         with self.assertRaises(Exception):
-            t_test_confidence_level(diff=1.03421, n=100)
+            t_test_confidence_level(sample_size=100, radius=1.03421)
 
-        t_test_confidence_level(0.09, 321)
+        t_test_confidence_level(321, 0.09)
 
     def test_reverse_ztest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            z_test_confidence_level(diff=0.1, n=0)
+            z_test_confidence_level(sample_size=0, radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            z_test_confidence_level(diff=-0.00948, n=100)
+            z_test_confidence_level(sample_size=100, radius=-0.00948)
         with self.assertRaises(Exception):
-            z_test_confidence_level(diff=1.03421, n=100)
+            z_test_confidence_level(sample_size=100, radius=1.03421)
 
         # should not raise exception
-        z_test_confidence_level(0.2, 82)
+        z_test_confidence_level(82, 0.2)
 
     def test_reverse_ztest_pr(self):
         # Difference out of bounds

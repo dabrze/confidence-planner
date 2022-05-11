@@ -60,6 +60,23 @@ def _check_radius_conf(
         )
 
 
+def _check_n_radius(
+    sample_size: float, interval_radius: float, n_splits: int = 1
+):
+    if interval_radius < 0 or interval_radius > 0.5:
+        raise Exception(
+            f'Difference should by between <0, 0.5>, not "{interval_radius}"'
+        )
+    if sample_size <= 0:
+        raise Exception(
+            f'Sample size must be an integer greater tha 0, not "{n_splits}"'
+        )
+
+    if n_splits <= 0:
+        raise Exception(
+            f'Number of folds must be an integer greater tha 0, not "{n_splits}"'
+        )
+
 def cap(low, high):
     def wrapper(f):
         @functools.wraps(f)
@@ -354,7 +371,7 @@ def cross_validation_sample_size(
 
 
 @cap(low=0.0, high=1.0)
-def langford_confidence_level(diff: float, n: int) -> float:
+def langford_confidence_level(sample_size: int, radius: float) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -362,35 +379,24 @@ def langford_confidence_level(diff: float, n: int) -> float:
 
     Parameters
     ----------
-    diff : float or int
+    radius : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
         e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
         Should be between 0 and 1 -> <0, 1>.
-    n : int
+    sample_size : int
         Number of samples used in a test set greater than 0.
     """
+    _check_n_radius(sample_size, radius)
 
-    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
-    diff = diff * 100
-
-    # Checking correctness of user input
-    if n <= 0:
-        raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
-        )
-
-    if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    pr2 = (diff / 100) ** 2
-    expnt = math.exp(2 * n * pr2)
+    pr2 = radius ** 2
+    expnt = math.exp(2 * sample_size * pr2)
     conf = 1 - 2 / expnt
 
     return conf
 
 
 @cap(low=0.0, high=1.0)
-def t_test_confidence_level(diff: float, n: int) -> float:
+def t_test_confidence_level(sample_size: int, radius: float) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -398,34 +404,22 @@ def t_test_confidence_level(diff: float, n: int) -> float:
 
     Parameters
     ----------
-    diff : float or int
+    radius : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
         e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
         Should be between 0 and 1 -> <0, 1>.
-    n : int
+    sample_size : int
         Number of samples from a test set greater than 0.
     """
+    _check_n_radius(sample_size, radius)
 
-    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
-    diff = diff * 100
-
-    # Checking correctness of user input
-    if n <= 0:
-        raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
-        )
-
-    if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    pr = diff / 100
-    t = pr / math.sqrt(0.25 / n)
-    conf = 2 * st.t.cdf(t, n - 1) - 1
+    t = radius / math.sqrt(0.25 / sample_size)
+    conf = 2 * st.t.cdf(t, sample_size - 1) - 1
     return conf
 
 
 @cap(low=0.0, high=1.0)
-def z_test_confidence_level(diff: float, n: int) -> float:
+def z_test_confidence_level(sample_size: int, radius: float) -> float:
     """
     Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
     or acc-lower_bound (diff) and number of samples (n).
@@ -433,27 +427,16 @@ def z_test_confidence_level(diff: float, n: int) -> float:
 
     Parameters
     ----------
-    diff : float or int
+    radius : float or int
         Difference from accuracy to lower/upper bound of a confidence interval,
         e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
         Should be between 0 and 1 -> <0, 1>.
-    n : int
+    sample_size : int
         Number of samples from a test set greater than 0.
     """
+    _check_n_radius(sample_size, radius)
 
-    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
-    diff = diff * 100
-
-    # Checking correctness of user input
-    if n <= 0:
-        raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
-        )
-
-    if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    z = (math.sqrt(n) * diff) / 50
+    z = (math.sqrt(sample_size) * radius) / 50
     conf = 2 * st.norm.cdf(z) - 1
     return conf
 
@@ -501,11 +484,11 @@ def estimate_sample_size(accuracy_radius, confidence_level, method="z_test", n_s
 
 def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
     if method == "holdout_z_test":
-        return z_test_confidence_level(accuracy_radius, sample_size)
+        return z_test_confidence_level(sample_size, accuracy_radius)
     if method == "holdout_t_test":
-        return t_test_confidence_level(accuracy_radius, sample_size)
+        return t_test_confidence_level(sample_size, accuracy_radius)
     elif method == "holdout_langford":
-        return langford_confidence_level(accuracy_radius, sample_size)
+        return langford_confidence_level(sample_size, accuracy_radius)
     else:
         raise Exception(
             "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_t_test', "
