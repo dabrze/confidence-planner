@@ -25,16 +25,10 @@ def _min_max(value, low: float = 0.0, high: float = 1.0) -> list:
     return value
 
 
-def _check_n_acc_conf(n: int, acc: float, conf: float):
-    """
-    Sanity checks for sample size, accuracy, and confidence level
-    :param n: sample size
-    :param acc: accuracy
-    :param conf: confidence level
-    """
+def _check_n_acc_conf(n: int, acc: float, conf: float, n_splits: int = 1):
     if n <= 0:
         raise Exception(
-            f'Number of samples must be a natural number -> whole, positive and greater than 0, not "{n}"'
+            f'Number of samples must be an integer greater than 0, not "{n}"'
         )
 
     if acc < 0.0 or acc > 1.0:
@@ -42,6 +36,28 @@ def _check_n_acc_conf(n: int, acc: float, conf: float):
 
     if conf <= 0.0 or conf >= 1.0:
         raise Exception(f"Confidence level should be between (0, 1), not {conf}")
+
+    if n_splits <= 0:
+        raise Exception(
+            f'Number of folds must be an integer greater tha 0, not "{n_splits}"'
+        )
+
+
+def _check_radius_conf(
+    confidence_level: float, interval_radius: float, n_splits: int = 1
+):
+    if interval_radius < 0 or interval_radius > 0.5:
+        raise Exception(
+            f'Difference should by between <0, 0.5>, not "{interval_radius}"'
+        )
+    if confidence_level <= 0 or confidence_level >= 1:
+        raise Exception(
+            f'Confidence level should be between (0, 1), not "{confidence_level}"'
+        )
+    if n_splits <= 0:
+        raise Exception(
+            f'Number of folds must be an integer greater tha 0, not "{n_splits}"'
+        )
 
 
 def cap(low, high):
@@ -81,7 +97,9 @@ def wilson_ci(sample_size: int, accuracy: float, confidence_level: float) -> lis
 
 
 @cap(low=0.0, high=1.0)
-def clopper_pearson_ci(sample_size: int, accuracy: float, confidence_level: float) -> list:
+def clopper_pearson_ci(
+    sample_size: int, accuracy: float, confidence_level: float
+) -> list:
     """
     Returns a confidence interval according to the Clopper-Pearson approximation, based on the number of holdout
     test samples, obtained accuracy, and desired confidence level.
@@ -201,12 +219,7 @@ def cross_validation_ci(
     confidence_level : float
         Desire confidence level. Should be between 0 and 1.
     """
-    _check_n_acc_conf(sample_size, accuracy, confidence_level)
-    if n_splits <= 0:
-        raise Exception(
-            f"Number of folds must be a natural number -> whole, positive and greater "
-            f'than 0, not "{sample_size}"'
-        )
+    _check_n_acc_conf(sample_size, accuracy, confidence_level, n_splits=n_splits)
 
     x = math.log((1 - confidence_level) / 2) * n_splits / 2 / sample_size
     t = math.sqrt(-x)
@@ -220,9 +233,8 @@ def cross_validation_ci(
 @cap(low=0.0, high=1.0)
 def percentiles_ci(accuracies: list, confidence_level: float) -> list:
     """
-    Function takes list of resamples accuracies obtained from bootstrap method(accs) and confidence (conf).
-    Returns confidence interval for the given confidence as well as confidence intervals
-    for 90%, 95%, 98% and 99% confidences.
+    Returns confidence interval for the given confidence level for a set of bootstrap results, according to percentile
+    measurement.
 
     Parameters
     ----------
@@ -281,6 +293,66 @@ def progressive_validation_ci(
     return int_conf
 
 
+def langford_sample_size(interval_radius: float, confidence_level: float) -> int:
+    """
+    Estimates the number of examples that should be used as holdout to obtain a given confidence interval radius at a
+    given confidence level, according to Langford's approximation.
+
+    Parameters
+    ----------
+    interval_radius : float
+        Half of the expected confidence interval width. Should be between 0 and 0.5.
+    confidence_level : float
+        Confidence level. Should be between 0 and 1.
+    """
+    _check_radius_conf(confidence_level, interval_radius)
+
+    n = math.log(2 / (1 - confidence_level)) / (2 * interval_radius**2)
+    return math.ceil(n)
+
+
+def z_test_sample_size(interval_radius: float, confidence_level: float) -> int:
+    """
+    Estimates the number of examples that should be used as holdout to obtain a given confidence interval radius at a
+    given confidence level, according to Langford's approximation.
+
+    Parameters
+    ----------
+    interval_radius : float
+        Half of the expected confidence interval width. Should be between 0 and 0.5.
+    confidence_level : float
+        Confidence level. Should be between 0 and 1.
+    """
+    _check_radius_conf(confidence_level, interval_radius)
+
+    z = st.norm.ppf(1 - (1 - confidence_level) / 2)
+    n = (z * math.sqrt(0.25) / interval_radius) ** 2
+    return math.ceil(n)
+
+
+def cross_validation_sample_size(
+    interval_radius: float, confidence_level: float, n_splits: int
+) -> int:
+    """
+    Estimates the number of examples in a dataset taht are needed to obtain a given confidence interval radius at a
+    given confidence level, when performing corss-validation with a given number of splits.
+
+    Parameters
+    ----------
+    interval_radius : float
+        Half of the expected confidence interval width. Should be between 0 and 0.5.
+    confidence_level : float
+        Confidence level. Should be between 0 and 1.
+    n_splits: int
+        Number of cross-validation splits. Must be greater than 0.
+    """
+    _check_radius_conf(confidence_level, interval_radius)
+
+    n = -math.log((1 - confidence_level) / 2) * n_splits / 2 / (interval_radius**2)
+
+    return math.ceil(n)
+
+
 @cap(low=0.0, high=1.0)
 def langford_confidence_level(diff: float, n: int) -> float:
     """
@@ -315,62 +387,6 @@ def langford_confidence_level(diff: float, n: int) -> float:
     conf = 1 - 2 / expnt
 
     return conf
-
-
-def langford_sample_size(diff: float, conf: float) -> int:
-    """
-    Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
-    or acc-lower_bound (diff) and confidence (conf).
-    Returns rounded number of samples which should be taken to obtain a given confidence interval.
-
-    Parameters
-    ----------
-    diff : float or int
-        Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
-        Should be between 0 and 1 -> <0, 1>.
-    conf : float
-        Confidence. Should be between 0 and 1 -> (0, 1).
-    """
-
-    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
-    diff = diff * 100
-
-    # Checking correctness of user input
-    if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    if conf <= 0 or conf >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
-
-    n = math.log(2 / (1 - conf)) / (2 * (diff / 100) ** 2)
-    return math.ceil(n)
-
-
-def cross_validation_sample_size(diff: float, confidence_level: float, n_splits: int) -> int:
-    """
-    Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
-    or acc-lower_bound (diff) and confidence (conf).
-    Returns rounded number of samples which should be taken to obtain a given confidence interval.
-
-    Parameters
-    ----------
-    diff : float or int
-        Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
-        Should be between 0 and 1 -> <0, 1>.
-    confidence_level : float
-        Confidence. Should be between 0 and 1 -> (0, 1).
-    """
-    if diff < 0 or diff > 1:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    if confidence_level <= 0 or confidence_level >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not "{confidence_level}"')
-
-    n = -math.log((1 - confidence_level) / 2) * n_splits / 2 / (diff ** 2)
-
-    return math.ceil(n)
 
 
 @cap(low=0.0, high=1.0)
@@ -442,39 +458,6 @@ def z_test_confidence_level(diff: float, n: int) -> float:
     return conf
 
 
-def z_test_sample_size(diff: float, conf: float) -> int:
-    """
-    Function takes difference from accuracy to lower/upper bound which is upper_bound-acc
-    or acc-lower_bound (diff) and confidence (conf).
-    Returns rounded number of samples which should be taken to obtain a given confidence interval.
-
-    Parameters
-    ----------
-    diff : float
-        Difference from accuracy to lower/upper bound of a confidence interval,
-        e.g. if accuracy is 0.9 and interval is [0.85, 0.95], then diff=0.05.
-        Should be between 0 and 1 -> <0, 1>.
-    conf : float
-        Confidence level. Should be between 0 and 1 -> (0, 1).
-    """
-
-    # Scalling difference by *100 as functions were prepared for percentage scale (0-100)
-    diff = diff * 100
-
-    # Checking correctness of user input
-    # todo diff max 50...
-    if diff < 0 or diff > 100:
-        raise Exception(f'Difference should by between <0, 1>, not "{diff / 100}"')
-
-    if conf <= 0 or conf >= 1:
-        raise Exception(f'Confidence level should be between (0, 1), not "{conf}"')
-
-
-    z = st.norm.ppf(1 - (1 - conf) / 2)
-    n = (z * math.sqrt(0.25) / (diff / 100)) ** 2
-    return math.ceil(n)
-
-
 def estimate_confidence_interval(
     sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"
 ):
@@ -503,24 +486,28 @@ def estimate_confidence_interval(
 
 
 def estimate_sample_size(accuracy_radius, confidence_level, method="z_test"):
-    if method == "z_test":
+    if method == "holdout_z_test" or method == "bootstrap":
         return z_test_sample_size(accuracy_radius, confidence_level)
-    elif method == "langford":
+    elif method == "holdout_langford":
         return langford_sample_size(accuracy_radius, confidence_level)
+    elif method == "cv":
+        return cross_validation_sample_size(accuracy_radius, confidence_level)
     else:
         raise Exception(
-            "Unknown sample size estimation method. Should be one of: 'z_test', 'langford'"
+            "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_langford', 'cv',"
+            "bootstrap"
         )
 
 
 def estimate_confidence_level(accuracy_radius, sample_size, method="z_test"):
-    if method == "z_test":
+    if method == "holdout_z_test":
         return z_test_confidence_level(accuracy_radius, sample_size)
-    if method == "t_test":
+    if method == "holdout_t_test":
         return t_test_confidence_level(accuracy_radius, sample_size)
-    elif method == "langford":
+    elif method == "holdout_langford":
         return langford_confidence_level(accuracy_radius, sample_size)
     else:
         raise Exception(
-            "Unknown sample size estimation method. Should be one of: 'z_test', 't_test', 'langford'"
+            "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_t_test', "
+            "'holdout_langford'"
         )

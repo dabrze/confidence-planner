@@ -103,15 +103,15 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_loose_langford_reverse(self):
         # Difference out of bounds
         with self.assertRaises(Exception):
-            langford_sample_size(diff=-0.00948, conf=0.9)
+            langford_sample_size(interval_radius=-0.00948, confidence_level=0.9)
         with self.assertRaises(Exception):
-            langford_sample_size(diff=1.03421, conf=0.9)
+            langford_sample_size(interval_radius=1.03421, confidence_level=0.9)
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            langford_sample_size(diff=0.1, conf=0)
+            langford_sample_size(interval_radius=0.1, confidence_level=0)
         with self.assertRaises(Exception):
-            langford_sample_size(diff=0.1, conf=1)
+            langford_sample_size(interval_radius=0.1, confidence_level=1)
 
         langford_sample_size(0.15, 0.9)
 
@@ -237,15 +237,15 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_reverse_ztest_pr(self):
         # Difference out of bounds
         with self.assertRaises(Exception):
-            z_test_sample_size(diff=-0.00948, conf=0.9)
+            z_test_sample_size(interval_radius=-0.00948, confidence_level=0.9)
         with self.assertRaises(Exception):
-            z_test_sample_size(diff=1.03421, conf=0.9)
+            z_test_sample_size(interval_radius=1.03421, confidence_level=0.9)
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            z_test_sample_size(diff=0.1, conf=0)
+            z_test_sample_size(interval_radius=0.1, confidence_level=0)
         with self.assertRaises(Exception):
-            z_test_sample_size(diff=0.1, conf=1)
+            z_test_sample_size(interval_radius=0.1, confidence_level=1)
 
         # should not raise exception
         z_test_sample_size(0.08, 0.9)
