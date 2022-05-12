@@ -427,6 +427,7 @@ def z_test_confidence_level(sample_size: int, interval_radius: float) -> float:
     return conf
 
 
+@cap(low=0.0, high=1.0)
 def cross_validation_confidence_level(
     sample_size: int, interval_radius: float, n_splits: int
 ) -> float:
@@ -446,6 +447,7 @@ def cross_validation_confidence_level(
     return conf
 
 
+@cap(low=0.0, high=1.0)
 def percentiles_confidence_level(
     accuracies: list, interval_radius: float, method="rank"
 ):
@@ -467,8 +469,12 @@ def percentiles_confidence_level(
     _check_accuracies_conf_radius(accuracies, 0.5, interval_radius)
 
     accuracies_median = np.median(accuracies)
-    conf_lower = st.percentileofscore(accuracies, accuracies_median - interval_radius, method)
-    conf_upper = st.percentileofscore(accuracies, accuracies_median + interval_radius, method)
+    conf_lower = st.percentileofscore(
+        accuracies, accuracies_median - interval_radius, method
+    )
+    conf_upper = st.percentileofscore(
+        accuracies, accuracies_median + interval_radius, method
+    )
 
     confidence_level = (conf_upper - conf_lower) / 100
 
@@ -507,7 +513,7 @@ def estimate_sample_size(
 ):
     if method == "holdout_z_test" or method == "bootstrap":
         return z_test_sample_size(interval_radius, confidence_level)
-    elif method == "holdout_langford":
+    elif method == "holdout_langford" or method == "progressive":
         return langford_sample_size(interval_radius, confidence_level)
     elif method == "cv":
         if n_splits <= 1:
@@ -516,7 +522,7 @@ def estimate_sample_size(
     else:
         raise Exception(
             "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_langford', 'cv',"
-            "bootstrap"
+            "'bootstrap', 'progressive'."
         )
 
 
@@ -527,7 +533,7 @@ def estimate_confidence_level(
         return z_test_confidence_level(sample_size, interval_radius)
     if method == "holdout_t_test":
         return t_test_confidence_level(sample_size, interval_radius)
-    elif method == "holdout_langford":
+    elif method == "holdout_langford" or "progressive":
         return langford_confidence_level(sample_size, interval_radius)
     elif method == "cv":
         if n_splits <= 1:
@@ -541,6 +547,6 @@ def estimate_confidence_level(
         return percentiles_confidence_level(sample_size, interval_radius)
     else:
         raise Exception(
-            "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_t_test', "
-            "'holdout_langford', 'cv'"
+            "Unknown confidence level estimation method. Should be one of: 'holdout_z_test', 'holdout_t_test', "
+            "'holdout_langford', 'cv', 'progressive', 'bootstrap'"
         )
