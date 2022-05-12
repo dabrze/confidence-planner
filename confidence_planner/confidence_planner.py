@@ -278,34 +278,6 @@ def percentiles_ci(accuracies: list, confidence_level: float) -> list:
     return int_conf
 
 
-@cap(low=0.0, high=1.0)
-def progressive_validation_ci(
-    sample_size: int, accuracy: float, confidence_level: float
-) -> list:
-    """
-    Returns a confidence interval for progressive validation, based on the number of holdout
-    test samples, obtained accuracy, and desired confidence level.
-
-    Parameters
-    ----------
-    sample_size : int
-        Number of samples used in a test set.
-    accuracy : float
-        Accuracy obtained on the test set. Should be between 0 and 1.
-    confidence_level : float
-        Desired confidence level. Should be between 0 and 1.
-    """
-    _check_n_acc_conf(sample_size, accuracy, confidence_level)
-
-    x = math.log((1 - confidence_level) / 2) / 2 / sample_size
-    t = math.sqrt(-x)
-    lower_bound = accuracy - t
-    upper_bound = accuracy + t
-    int_conf = [lower_bound, upper_bound]
-
-    return int_conf
-
-
 def langford_sample_size(interval_radius: float, confidence_level: float) -> int:
     """
     Estimates the number of examples that should be used as holdout to obtain a given confidence interval radius at a
@@ -482,11 +454,39 @@ def percentiles_confidence_level(
 
 
 def estimate_confidence_interval(
-    sample_size, accuracy, confidence_level, n_splits=None, method="holdout_wilson"
+    sample_size: int,
+    accuracy: float or list,
+    confidence_level: float,
+    n_splits: int = None,
+    method: str = "holdout",
 ):
-    if method == "holdout_wilson":
+    """
+    Wrapper function for estimating accuracy confidence intervals, according to different approximation functions for
+    different classifier evaluation procedures.
+
+    Parameters
+    ----------
+    sample_size : int
+        Number of samples used in a test set. For the holdout procedure this will be the size of the holdout test set.
+        For cross-validation this should be the total number of examples in all the folds (typically the size of
+        the dataset). For progressive validation this is the size of the entire dataset. For bootstrapping this
+        parameter will be ignored.
+    accuracy : float or list
+        Estimated accuracy. For the holdout procedure this is the accuracy obtained on the holdout test set, for
+         cross-validation and progressive validation it is the mean accuracy from all folds/progressive test sets, for
+          bootstrapping this should be a list of accuracies obtained for each bootstrap sample.
+    confidence_level : float
+        Desired confidence level. Should be between 0 and 1.
+    n_splits : int
+        Optional. Number of folds used in cross validation. Ignored when method is different than 'cv'.
+    method : str
+        Evaluation method. Parameter used to determine the confidence interval approximation method. Should be one of:
+        'holdout', 'holdout_wilson', 'holdout_langford', 'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test',
+        'bootstrap', 'cv', 'progressive'. When 'holdout' uses the 'holdout_wilson' approximation.  Default: 'holdout'.
+    """
+    if method == "holdout_wilson" or method == "holdout":
         return wilson_ci(sample_size, accuracy, confidence_level)
-    elif method == "holdout_langford":
+    elif method == "holdout_langford" or method == "progressive":
         return langford_ci(sample_size, accuracy, confidence_level)
     elif method == "holdout_clopper_pearson":
         return clopper_pearson_ci(sample_size, accuracy, confidence_level)
@@ -497,56 +497,102 @@ def estimate_confidence_interval(
     elif method == "bootstrap":
         return percentiles_ci(accuracy, confidence_level)
     elif method == "cv":
+        if n_splits <= 1:
+            raise Exception("Provide the n_splits parameter with a value > 1.")
         return cross_validation_ci(sample_size, n_splits, accuracy, confidence_level)
-    elif method == "progressive":
-        return progressive_validation_ci(sample_size, accuracy, confidence_level)
     else:
         raise Exception(
-            "Unknown CI estimation method. Should be one of: 'holdout_wilson', 'holdout_langford', "
+            "Unknown CI estimation method. Should be one of: 'holdout', 'holdout_wilson', 'holdout_langford', "
             "'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test', 'bootstrap', "
             "'cv', 'progressive'"
         )
 
 
 def estimate_sample_size(
-    interval_radius, confidence_level, method="z_test", n_splits=1
+    interval_radius: float,
+    confidence_level: float,
+    n_splits: int = None,
+    method: str = "holdout",
 ):
-    if method == "holdout_z_test" or method == "bootstrap":
+    """
+    Wrapper function for estimating the sample size needed to obtain a specified confidence interval, for different
+    classifier evaluation procedures.
+
+    Parameters
+    ----------
+    interval_radius : float
+        Half of the expected confidence interval width. Should be between 0 and 0.5.
+    confidence_level : float
+        Desired confidence level. Should be between 0 and 1.
+    n_splits : int
+        Optional. Number of folds used in cross validation. Ignored when method is different than 'cv'.
+    method : str
+        Evaluation method. Parameter used to determine the confidence interval approximation method. Should be one of:
+        'holdout', 'holdout_z_test', 'holdout_langford', 'cv', 'bootstrap', 'progressive'. When 'holdout' uses the
+        'holdout_z_test' approximation. Default: 'holdout'.
+    """
+    if method == "holdout_z_test" or method == "holdout" or method == "bootstrap":
         return z_test_sample_size(interval_radius, confidence_level)
     elif method == "holdout_langford" or method == "progressive":
         return langford_sample_size(interval_radius, confidence_level)
     elif method == "cv":
         if n_splits <= 1:
-            raise Exception("Provide the n_splits parameter with a value > 1")
+            raise Exception("Provide the n_splits parameter with a value > 1.")
         return cross_validation_sample_size(interval_radius, confidence_level, n_splits)
     else:
         raise Exception(
-            "Unknown sample size estimation method. Should be one of: 'holdout_z_test', 'holdout_langford', 'cv',"
-            "'bootstrap', 'progressive'."
+            "Unknown sample size estimation method. Should be one of: 'holdout', 'holdout_z_test', 'holdout_langford', "
+            "'cv', 'bootstrap', 'progressive'."
         )
 
 
 def estimate_confidence_level(
-    sample_size, interval_radius, method="z_test", n_splits=1, accuracies=None
+    sample_size: int,
+    interval_radius: float,
+    n_splits: int = None,
+    method: str = "holdout",
+    accuracies: list = None,
 ):
-    if method == "holdout_z_test":
+    """
+    Wrapper function for estimating the confidence level of interval radius for a given sample size and a given
+    evaluation procedure.
+
+    Parameters
+    ----------
+    sample_size : int
+        Number of samples used in a test set. For the holdout procedure this will be the size of the holdout test set.
+        For cross-validation this should be the total number of examples in all the folds (typically the size of
+        the dataset). For progressive validation this is the size of the entire dataset. For bootstrapping this
+        parameter will be ignored.
+    interval_radius : float or list
+        Half of the expected confidence interval width. Should be between 0 and 0.5.
+    n_splits : int
+        Optional. Number of folds used in cross validation. Ignored when method is different than 'cv'.
+    method : str
+        Evaluation method. Parameter used to determine the confidence interval approximation method. Should be one of:
+        'holdout', 'holdout_z_test', 'holdout_t_test', 'holdout_langford', 'cv', 'progressive', 'bootstrap'.
+        When 'holdout' uses the 'holdout_z_test' approximation. Default: 'holdout'.
+    accuracies: list
+        Used only when method='bootstrap'. This should be a list of accuracies obtained for each bootstrap sample.
+    """
+    if method == "holdout_z_test" or method == "holdout":
         return z_test_confidence_level(sample_size, interval_radius)
     if method == "holdout_t_test":
         return t_test_confidence_level(sample_size, interval_radius)
-    elif method == "holdout_langford" or "progressive":
+    elif method == "holdout_langford" or method == "progressive":
         return langford_confidence_level(sample_size, interval_radius)
     elif method == "cv":
         if n_splits <= 1:
-            raise Exception("Provide the n_splits parameter with a value > 1")
+            raise Exception("Provide the n_splits parameter with a value > 1.")
         return cross_validation_confidence_level(sample_size, interval_radius, n_splits)
     elif method == "bootstrap":
         if accuracies is None:
             raise Exception(
                 "Provide the accuracies parameter with a list of bootstrapping results."
             )
-        return percentiles_confidence_level(sample_size, interval_radius)
+        return percentiles_confidence_level(accuracies, interval_radius)
     else:
         raise Exception(
-            "Unknown confidence level estimation method. Should be one of: 'holdout_z_test', 'holdout_t_test', "
-            "'holdout_langford', 'cv', 'progressive', 'bootstrap'"
+            "Unknown confidence level estimation method. Should be one of: 'holdout', 'holdout_z_test', "
+            "'holdout_t_test', 'holdout_langford', 'cv', 'progressive', 'bootstrap'"
         )

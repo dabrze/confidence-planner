@@ -1,16 +1,14 @@
-import os, sys
+import os
+import sys
 import unittest
 
 current = os.path.dirname(os.path.realpath(__file__))
-print(current)
 parent = os.path.dirname(current)
-print(parent)
 sys.path.append(parent)
 from confidence_planner import *
 
 
 class TestConfidencePlannerMethods(unittest.TestCase):
-
     def test_clopper_pearson(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
@@ -21,7 +19,7 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             clopper_pearson_ci(sample_size=100, accuracy=1.0034, confidence_level=0.9)
         with self.assertRaises(Exception):
             clopper_pearson_ci(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
-        
+
         # confidence out of bounds
         with self.assertRaises(Exception):
             clopper_pearson_ci(sample_size=79, accuracy=0.88, confidence_level=0)
@@ -45,27 +43,38 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
-
     def test_cv_interval(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=0, n_splits=10, accuracy=0.78, confidence_level=0.9)
+            cross_validation_ci(
+                sample_size=0, n_splits=10, accuracy=0.78, confidence_level=0.9
+            )
 
         # number of folds out of bounds
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=453, n_splits=0, accuracy=0.78, confidence_level=0.9)
+            cross_validation_ci(
+                sample_size=453, n_splits=0, accuracy=0.78, confidence_level=0.9
+            )
 
         # accuracies out of bounds
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=100, n_splits=10, accuracy=1.0034, confidence_level=0.9)
+            cross_validation_ci(
+                sample_size=100, n_splits=10, accuracy=1.0034, confidence_level=0.9
+            )
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=57, n_splits=10, accuracy=-0.000432, confidence_level=0.9)
+            cross_validation_ci(
+                sample_size=57, n_splits=10, accuracy=-0.000432, confidence_level=0.9
+            )
 
         # confidence out of bounds
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=79, n_splits=10, accuracy=0.88, confidence_level=0)
+            cross_validation_ci(
+                sample_size=79, n_splits=10, accuracy=0.88, confidence_level=0
+            )
         with self.assertRaises(Exception):
-            cross_validation_ci(sample_size=79, n_splits=10, accuracy=0.88, confidence_level=1)
+            cross_validation_ci(
+                sample_size=79, n_splits=10, accuracy=0.88, confidence_level=1
+            )
 
         # should not raise exception
         ci = cross_validation_ci(888, 7, 0.8, 0.88)
@@ -170,40 +179,6 @@ class TestConfidencePlannerMethods(unittest.TestCase):
 
         self.assertEqual(ci[0], 0.714)
         self.assertEqual(ci[1], 0.894)
-
-    def test_prog_val(self):
-        # number of samples out of bounds
-        with self.assertRaises(Exception):
-            progressive_validation_ci(sample_size=0, accuracy=0.78, confidence_level=0.9)
-
-        # accuracies out of bounds
-        with self.assertRaises(Exception):
-            progressive_validation_ci(sample_size=100, accuracy=1.0034, confidence_level=0.9)
-        with self.assertRaises(Exception):
-            progressive_validation_ci(sample_size=57, accuracy=-0.000432, confidence_level=0.9)
-
-        # confidence out of bounds
-        with self.assertRaises(Exception):
-            progressive_validation_ci(sample_size=79, accuracy=0.88, confidence_level=0)
-        with self.assertRaises(Exception):
-            progressive_validation_ci(sample_size=79, accuracy=0.88, confidence_level=1)
-
-        ci = progressive_validation_ci(100, 0.9, 0.7)
-        self.assertGreaterEqual(ci[0], 0.0)
-        self.assertLessEqual(ci[1], 1.0)
-        self.assertLessEqual(ci[0], 0.9)
-        self.assertGreaterEqual(ci[1], 0.9)
-
-        self.assertEqual(ci[0], 0.8026059553954689)
-        self.assertEqual(ci[1], 0.9973940446045312)
-
-        ci = progressive_validation_ci(100, 0.02, 0.90)
-        self.assertGreaterEqual(ci[0], 0.0)
-        self.assertLessEqual(ci[1], 1.0)
-
-        ci = progressive_validation_ci(100, 0.98, 0.90)
-        self.assertGreaterEqual(ci[0], 0.0)
-        self.assertLessEqual(ci[1], 1.0)
 
     def test_reverse_ttest_pr_conf(self):
         # number of samples out of bounds
@@ -350,43 +325,6 @@ class TestConfidencePlannerMethods(unittest.TestCase):
         self.assertGreaterEqual(ci[0], 0.0)
         self.assertLessEqual(ci[1], 1.0)
 
-    def test_ci_estimation(self):
-        with self.assertRaises(Exception):
-            estimate_confidence_interval(300, 0.75, 0.90, method="random_method")
-
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_z_test"),
-            z_test_ci(300, 0.75, 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_t_test"),
-            t_test_ci(300, 0.75, 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_langford"),
-            langford_ci(300, 0.75, 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_wilson"),
-            wilson_ci(300, 0.75, 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_clopper_pearson"),
-            clopper_pearson_ci(300, 0.75, 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, [0.88, 0.9, 0.68, 0.79], 0.90, method="bootstrap"),
-            percentiles_ci([0.88, 0.9, 0.68, 0.79], 0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="cv", n_splits=5),
-            cross_validation_ci(sample_size=300, n_splits=5, accuracy=0.75, confidence_level=0.90)
-        )
-        self.assertEqual(
-            estimate_confidence_interval(300, 0.75, 0.90, method="progressive"),
-            progressive_validation_ci(300, 0.75, 0.90)
-        )
-
     def test_cv_sample_size(self):
         for n, splits, conf in [(700, 10, 0.9), (500, 5, 0.8), (1000, 3, 0.95)]:
             acc = 0.8
@@ -442,5 +380,120 @@ class TestConfidencePlannerMethods(unittest.TestCase):
 
         for n, conf in [(700, 0.9), (500, 0.8), (1000, 0.95)]:
             ci = percentiles_ci(accuracies, conf)
-            conf_estimated = percentiles_confidence_level(accuracies, median_acc - ci[0])
+            conf_estimated = percentiles_confidence_level(
+                accuracies, median_acc - ci[0]
+            )
             self.assertAlmostEqual(conf_estimated, conf, delta=0.1)
+
+    def test_ci_estimation(self):
+        with self.assertRaises(Exception):
+            estimate_confidence_interval(300, 0.75, 0.90, method="random_method")
+
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_z_test"),
+            z_test_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_t_test"),
+            t_test_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_langford"),
+            langford_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="holdout_wilson"),
+            wilson_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="holdout"),
+            wilson_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(
+                300, 0.75, 0.90, method="holdout_clopper_pearson"
+            ),
+            clopper_pearson_ci(300, 0.75, 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(
+                300, [0.88, 0.9, 0.68, 0.79], 0.90, method="bootstrap"
+            ),
+            percentiles_ci([0.88, 0.9, 0.68, 0.79], 0.90),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="cv", n_splits=5),
+            cross_validation_ci(
+                sample_size=300, n_splits=5, accuracy=0.75, confidence_level=0.90
+            ),
+        )
+        self.assertEqual(
+            estimate_confidence_interval(300, 0.75, 0.90, method="progressive"),
+            langford_ci(300, 0.75, 0.90),
+        )
+
+    def test_sample_size_estimation(self):
+        with self.assertRaises(Exception):
+            estimate_sample_size(0.05, 0.90, method="random_method")
+
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="holdout_z_test"),
+            z_test_sample_size(0.05, 0.90),
+        )
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="holdout_langford"),
+            langford_sample_size(0.05, 0.90),
+        )
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="holdout"),
+            z_test_sample_size(0.05, 0.90),
+        )
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="bootstrap"),
+            z_test_sample_size(0.05, 0.90),
+        )
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="cv", n_splits=5),
+            cross_validation_sample_size(
+                n_splits=5, interval_radius=0.05, confidence_level=0.90
+            ),
+        )
+        self.assertEqual(
+            estimate_sample_size(0.05, 0.90, method="progressive"),
+            langford_sample_size(0.05, 0.90),
+        )
+
+    def test_confidence_level_estimation(self):
+        with self.assertRaises(Exception):
+            estimate_confidence_level(300, 0.05, method="random_method")
+
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="holdout_z_test"),
+            z_test_confidence_level(300, 0.05),
+        )
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="holdout_t_test"),
+            t_test_confidence_level(300, 0.05),
+        )
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="holdout_langford"),
+            langford_confidence_level(300, 0.05),
+        )
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="holdout"),
+            z_test_confidence_level(300, 0.05),
+        )
+        self.assertEqual(
+            estimate_confidence_level(
+                300, 0.05, method="bootstrap", accuracies=[0.88, 0.9, 0.68, 0.79]
+            ),
+            percentiles_confidence_level([0.88, 0.9, 0.68, 0.79], 0.05),
+        )
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="cv", n_splits=5),
+            cross_validation_confidence_level(300, 0.05, n_splits=5),
+        )
+        self.assertEqual(
+            estimate_confidence_level(300, 0.05, method="progressive"),
+            langford_confidence_level(300, 0.05),
+        )
