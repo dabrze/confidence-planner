@@ -88,13 +88,13 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_loose_langford_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            langford_confidence_level(sample_size=0, radius=0.1)
+            langford_confidence_level(sample_size=0, interval_radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            langford_confidence_level(sample_size=100, radius=-0.00948)
+            langford_confidence_level(sample_size=100, interval_radius=-0.00948)
         with self.assertRaises(Exception):
-            langford_confidence_level(sample_size=100, radius=1.03421)
+            langford_confidence_level(sample_size=100, interval_radius=1.03421)
 
         langford_confidence_level(200, 0.1)
 
@@ -208,26 +208,26 @@ class TestConfidencePlannerMethods(unittest.TestCase):
     def test_reverse_ttest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            t_test_confidence_level(sample_size=0, radius=0.1)
+            t_test_confidence_level(sample_size=0, interval_radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            t_test_confidence_level(sample_size=100, radius=-0.00948)
+            t_test_confidence_level(sample_size=100, interval_radius=-0.00948)
         with self.assertRaises(Exception):
-            t_test_confidence_level(sample_size=100, radius=1.03421)
+            t_test_confidence_level(sample_size=100, interval_radius=1.03421)
 
         t_test_confidence_level(321, 0.09)
 
     def test_reverse_ztest_pr_conf(self):
         # number of samples out of bounds
         with self.assertRaises(Exception):
-            z_test_confidence_level(sample_size=0, radius=0.1)
+            z_test_confidence_level(sample_size=0, interval_radius=0.1)
 
         # Difference out of bounds
         with self.assertRaises(Exception):
-            z_test_confidence_level(sample_size=100, radius=-0.00948)
+            z_test_confidence_level(sample_size=100, interval_radius=-0.00948)
         with self.assertRaises(Exception):
-            z_test_confidence_level(sample_size=100, radius=1.03421)
+            z_test_confidence_level(sample_size=100, interval_radius=1.03421)
 
         # should not raise exception
         z_test_confidence_level(82, 0.2)
@@ -407,3 +407,40 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             ci = langford_ci(n, acc, conf)
             n_estimated = langford_sample_size(acc - ci[0], conf)
             self.assertAlmostEqual(n_estimated, n, delta=1)
+
+    def test_cv_confidence_level(self):
+        for n, splits, conf in [(700, 10, 0.9), (500, 5, 0.8), (1000, 3, 0.95)]:
+            acc = 0.8
+            ci = cross_validation_ci(n, splits, acc, conf)
+            conf_estimated = cross_validation_confidence_level(n, acc - ci[0], splits)
+            self.assertAlmostEqual(conf_estimated, conf, places=6)
+
+    def test_z_test_confidence_level(self):
+        for n, conf in [(700, 0.9), (500, 0.8), (1000, 0.95)]:
+            acc = 0.8
+            ci = z_test_ci(n, acc, conf)
+            conf_estimated = z_test_confidence_level(n, acc - ci[0])
+            self.assertAlmostEqual(conf_estimated, conf, places=6)
+
+    def test_t_test_confidence_level(self):
+        for n, conf in [(700, 0.9), (500, 0.8), (1000, 0.95)]:
+            acc = 0.8
+            ci = t_test_ci(n, acc, conf)
+            conf_estimated = t_test_confidence_level(n, acc - ci[0])
+            self.assertAlmostEqual(conf_estimated, conf, places=6)
+
+    def test_langford_test_confidence_level(self):
+        for n, conf in [(700, 0.9), (500, 0.8), (1000, 0.95)]:
+            acc = 0.8
+            ci = langford_ci(n, acc, conf)
+            conf_estimated = langford_confidence_level(n, acc - ci[0])
+            self.assertAlmostEqual(conf_estimated, conf, places=6)
+
+    def test_percentile_confidence_level(self):
+        accuracies = np.random.normal(0.8, 0.01, 100)
+        median_acc = np.median(accuracies)
+
+        for n, conf in [(700, 0.9), (500, 0.8), (1000, 0.95)]:
+            ci = percentiles_ci(accuracies, conf)
+            conf_estimated = percentiles_confidence_level(accuracies, median_acc - ci[0])
+            self.assertAlmostEqual(conf_estimated, conf, delta=0.1)

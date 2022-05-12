@@ -43,7 +43,7 @@ acc = metrics.accuracy_score(y_test, y_pred)
 
 # confidence interval and sample size estimation
 ci = cp.estimate_confidence_interval(y_test.shape[0], acc, confidence_level=0.90)
-sample = cp.estimate_sample_size(accuracy_radius=0.05, confidence_level=0.90)
+sample = cp.estimate_sample_size(interval_radius=0.05, confidence_level=0.90)
 print(f"90% CI: {ci}")
 print(f"Samples needed for a 0.05 radius 90% CI: {sample}")
 ```
