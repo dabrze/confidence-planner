@@ -3,6 +3,9 @@ import numpy as np
 import functools
 import scipy.stats as st
 from statsmodels.stats.proportion import proportion_confint
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+import pandas as pd
 
 
 def _min_max(value, low: float = 0.0, high: float = 1.0) -> list:
@@ -596,3 +599,26 @@ def estimate_confidence_level(
             "Unknown confidence level estimation method. Should be one of: 'holdout', 'holdout_z_test', "
             "'holdout_t_test', 'holdout_langford', 'cv', 'progressive', 'bootstrap'"
         )
+
+
+def plot_interval(df, method, confidences = [0.9, 0.95, 0.98]):
+    colors = ['#03045E', '#023E8A', '#0077B6', '#0096C7', '#00B4D8', '#48CAE4', '#90E0EF', '#ADE8F4']
+    i = 0
+    for name_size_acc in zip(df.iloc[:, 0], df.iloc[:, 1], df.iloc[:, 2]):
+        patches = []
+        j = len(confidences)-1
+        for conf in sorted(confidences, reverse=True):
+            interval = estimate_confidence_interval(name_size_acc[1], name_size_acc[2], conf, method=method)
+            plt.errorbar(name_size_acc[2], i, xerr = np.array([[name_size_acc[2]-interval[0], interval[1]-name_size_acc[2]]]).T, 
+                    fmt = 'o', color = '#ee6c4d', ecolor = colors[j], elinewidth = (1-conf)*100, 
+                    capsize=len(df)*3-j, mew=4, markersize=5)
+            patches.append(mpatches.Patch(color=colors[j], label=f'Conf {sorted(confidences)[j]}'))
+            j-=1
+        i+=0.5
+    plt.xticks(fontsize=14)
+    plt.yticks(ticks = np.arange(0, len(df)/2, 0.5), labels = list(df.iloc[:, 0]), fontsize=14)
+    plt.xlabel("Accuracy", fontsize=16, labelpad=10)
+    plt.rcParams["figure.figsize"] = (15, len(df)*2)
+    plt.grid()
+    plt.legend(handles=patches, loc=(1.01, 0.5), prop={'size': 14})
+    plt.show()
