@@ -29,5 +29,6 @@ setuptools.setup(
         "numpy>=1.21.0",
         "scipy>=1.7.1",
         "statsmodels>=0.12.1"
+        "matplotlib"
     ]
 )

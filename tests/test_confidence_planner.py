@@ -383,7 +383,7 @@ class TestConfidencePlannerMethods(unittest.TestCase):
             conf_estimated = percentiles_confidence_level(
                 accuracies, median_acc - ci[0]
             )
-            self.assertAlmostEqual(conf_estimated, conf, delta=0.1)
+            self.assertAlmostEqual(conf_estimated, conf, delta=0.15)
 
     def test_ci_estimation(self):
         with self.assertRaises(Exception):

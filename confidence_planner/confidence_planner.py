@@ -5,7 +5,6 @@ import scipy.stats as st
 from statsmodels.stats.proportion import proportion_confint
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-import pandas as pd
 
 
 def _min_max(value, low: float = 0.0, high: float = 1.0) -> list:
@@ -601,24 +600,105 @@ def estimate_confidence_level(
         )
 
 
-def plot_interval(df, method, confidences = [0.9, 0.95, 0.98]):
-    colors = ['#03045E', '#023E8A', '#0077B6', '#0096C7', '#00B4D8', '#48CAE4', '#90E0EF', '#ADE8F4']
+def plot_classifier_intervals(
+    names,
+    sizes,
+    accuracies,
+    method,
+    confidence_levels=[0.9, 0.95, 0.98],
+    n_splits=None,
+    xlab="Accuracy",
+    width=12,
+    height=4,
+):
+    """
+    Wrapper function for estimating the confidence level of interval radius for a given sample size and a given
+    evaluation procedure.
+
+    Parameters
+    ----------
+    names : list
+        Names of classifiers the error bars will be plotted.
+    sizes : list
+        Sample sizes for estimating confidence intervals.
+    accuracies : list
+        Accuracies for each classifier.
+    method : str
+        Evaluation method. Parameter used to determine the confidence interval approximation method. Should be one of:
+        'holdout', 'holdout_wilson', 'holdout_langford', 'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test',
+        'bootstrap', 'cv', 'progressive'. When 'holdout' uses the 'holdout_wilson' approximation.
+    confidence_levels : list
+        Desired confidence levels, for which graded error bars will be plotted.
+    n_splits : int
+        Optional. Number of folds used in cross validation. Ignored when method is different than 'cv'.
+    xlab: str
+        X-axis label.
+    width: int
+        Plot width in inches.
+    height: int
+        Plot height in inches.
+    """
+    colors = [
+        "#03045E",
+        "#023E8A",
+        "#0077B6",
+        "#0096C7",
+        "#00B4D8",
+        "#48CAE4",
+        "#90E0EF",
+        "#ADE8F4",
+    ]
     i = 0
-    for name_size_acc in zip(df.iloc[:, 0], df.iloc[:, 1], df.iloc[:, 2]):
+    clf_num = len(names)
+    f = plt.figure(figsize=(width, height))
+
+    for name_size_acc in zip(names, sizes, accuracies):
         patches = []
-        j = len(confidences)-1
-        for conf in sorted(confidences, reverse=True):
-            interval = estimate_confidence_interval(name_size_acc[1], name_size_acc[2], conf, method=method)
-            plt.errorbar(name_size_acc[2], i, xerr = np.array([[name_size_acc[2]-interval[0], interval[1]-name_size_acc[2]]]).T, 
-                    fmt = 'o', color = '#ee6c4d', ecolor = colors[j], elinewidth = (1-conf)*100, 
-                    capsize=len(df)*3-j, mew=4, markersize=5)
-            patches.append(mpatches.Patch(color=colors[j], label=f'Conf {sorted(confidences)[j]}'))
-            j-=1
-        i+=0.5
+        j = len(confidence_levels) - 1
+        for conf in sorted(confidence_levels, reverse=True):
+            interval = estimate_confidence_interval(
+                name_size_acc[1],
+                name_size_acc[2],
+                conf,
+                method=method,
+                n_splits=n_splits,
+            )
+
+            if method == "bootstrap":
+                mean_acc = np.mean(name_size_acc[2])
+            else:
+                mean_acc = name_size_acc[2]
+
+            plt.errorbar(
+                mean_acc,
+                i,
+                xerr=np.array([[mean_acc - interval[0], interval[1] - mean_acc]]).T,
+                fmt="o",
+                color="#ee6c4d",
+                ecolor=colors[j],
+                elinewidth=(1 - conf) * 100,
+                capsize=3 * len(confidence_levels) - j,
+                mew=4,
+                markersize=5,
+            )
+            patches.append(
+                mpatches.Patch(
+                    color=colors[j], label=f"{sorted(confidence_levels)[j] * 100:.0f}%"
+                )
+            )
+            j -= 1
+        i += 0.5
     plt.xticks(fontsize=14)
-    plt.yticks(ticks = np.arange(0, len(df)/2, 0.5), labels = list(df.iloc[:, 0]), fontsize=14)
-    plt.xlabel("Accuracy", fontsize=16, labelpad=10)
-    plt.rcParams["figure.figsize"] = (15, len(df)*2)
+    plt.yticks(ticks=np.arange(0, clf_num / 2, 0.5), labels=list(names), fontsize=14)
+    plt.xlabel(xlab, fontsize=16, labelpad=10)
     plt.grid()
-    plt.legend(handles=patches, loc=(1.01, 0.5), prop={'size': 14})
-    plt.show()
+    plt.legend(
+        handles=patches,
+        loc="center left",
+        bbox_to_anchor=(1, 0.5),
+        fontsize=14,
+        title_fontsize=14,
+        title="Confidence level:",
+    )
+    plt.grid(b=None)
+    return f
