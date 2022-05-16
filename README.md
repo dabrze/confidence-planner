@@ -50,6 +50,10 @@ print(f"Samples needed for a 0.05 radius 90% CI: {sample}")
 
 More code examples (including cross-validation and bootstrapping) can be found in the `examples` folder.
 
+## Methods
+
+![Map of estimation methods](examples/img/map.svg)
+
 ## References
 
 Confidence-planner methods belong to the field of frequentist statistics.
