@@ -116,90 +116,18 @@ def display_page(pathname):
 ##########################################
 
 
-@app.callback(
-    Output("z_test_result", "children"),
-    Output("z_test_result_graph", "figure"),
-    Input("z_test_button", "n_clicks"),
-    State("z_test_sample", "value"),
-    State("z_test_accuracy", "value"),
-    State("z_test_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_holdout_z_test_callback(n_click, sample_size, accuracy, confidence_level):
-    return ci_callback(sample_size, accuracy, confidence_level, method="holdout_z_test")
-
-
-@app.callback(
-    Output("t_test_result", "children"),
-    Output("t_test_result_graph", "figure"),
-    Input("t_test_button", "n_clicks"),
-    State("t_test_sample", "value"),
-    State("t_test_accuracy", "value"),
-    State("t_test_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_holdout_t_test_callback(n_click, sample_size, accuracy, confidence_level):
-    return ci_callback(sample_size, accuracy, confidence_level, method="holdout_t_test")
-
-
-@app.callback(
-    Output("loose_langford_result", "children"),
-    Output("loose_langford_result_graph", "figure"),
-    Input("loose_langford_button", "n_clicks"),
-    State("loose_langford_sample", "value"),
-    State("loose_langford_accuracy", "value"),
-    State("loose_langford_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_holdout_langford_callback(n_click, sample_size, accuracy, confidence_level):
-    return ci_callback(
-        sample_size, accuracy, confidence_level, method="holdout_langford"
-    )
-
-
-@app.callback(
-    Output("clopper_pearson_result", "children"),
-    Output("clopper_pearson_result_graph", "figure"),
-    Input("clopper_pearson_button", "n_clicks"),
-    State("clopper_pearson_sample", "value"),
-    State("clopper_pearson_accuracy", "value"),
-    State("clopper_pearson_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_holdout_clopper_pearson_callback(
-    n_click, sample_size, accuracy, confidence_level
-):
-    return ci_callback(
-        sample_size, accuracy, confidence_level, method="holdout_clopper_pearson"
-    )
-
-
-@app.callback(
-    Output("wilson_result", "children"),
-    Output("wilson_result_graph", "figure"),
-    Input("wilson_button", "n_clicks"),
-    State("wilson_sample", "value"),
-    State("wilson_accuracy", "value"),
-    State("wilson_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_holdout_wilson_callback(n_click, sample_size, accuracy, confidence_level):
-    return ci_callback(sample_size, accuracy, confidence_level, method="holdout_wilson")
-
-
-@app.callback(
-    Output("progressive_validation_result", "children"),
-    Output("progressive_validation_result_graph", "figure"),
-    Input("progressive_validation_button", "n_clicks"),
-    State("progressive_validation_sample", "value"),
-    State("progressive_validation_accuracy", "value"),
-    State("progressive_validation_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_progressive_validation_callback(
-    n_click, sample_size, accuracy, confidence_level
-):
-    return ci_callback(sample_size, accuracy, confidence_level, method="progressive")
+for method in ['holdout_wilson', 'holdout_langford', 'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test',
+               'progressive', 'cv']:
+    app.callback(
+        Output(f"{method}_result", "children"),
+        Output(f"{method}_result_graph", "figure"),
+        Input(f"{method}_button", "n_clicks"),
+        State(f"{method}_sample", "value"),
+        State(f"{method}_accuracy", "value"),
+        State(f"{method}_confidence", "value"),
+        State(f"{method}", "id"),
+        State(f"{method}_folds", "value"),
+    )(ci_callback)
 
 
 @app.callback(
@@ -212,25 +140,7 @@ def ci_progressive_validation_callback(
 )
 def ci_bootstrap_callback(n_click, accuracies, confidence_level):
     accuracies_float = [float(accuracy) for accuracy in accuracies.split(",")]
-    return ci_callback(None, accuracies_float, confidence_level, method="bootstrap")
-
-
-@app.callback(
-    Output("cross_validation_result", "children"),
-    Output("cross_validation_result_graph", "figure"),
-    Input("cross_validation_button", "n_clicks"),
-    State("cross_validation_sample", "value"),
-    State("cross_validation_folds", "value"),
-    State("cross_validation_accuracy", "value"),
-    State("cross_validation_confidence", "value"),
-    prevent_initial_call=False,
-)
-def ci_cross_validation_callback(
-    n_click, sample_size, n_splits, accuracy, confidence_level
-):
-    return ci_callback(
-        sample_size, accuracy, confidence_level, method="cv", n_splits=n_splits
-    )
+    return ci_callback(n_click, None, accuracies_float, confidence_level, method="bootstrap")
 
 
 ##########################################
