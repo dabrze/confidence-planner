@@ -19,6 +19,15 @@ marks_accuracy={
         1.0: {'label': '100%', 'style': {'color': 'black'}}
     }
 
+marks_interval={
+        0: {'label': '0%', 'style': {'color': 'black'}},
+        0.1: {'label': '10%', 'style': {'color': 'black'}},
+        0.2: {'label': '20%', 'style': {'color': 'black'}},
+        0.3: {'label': '30%', 'style': {'color': 'black'}},
+        0.4: {'label': '40%', 'style': {'color': 'black'}},
+        0.5: {'label': '50%', 'style': {'color': 'black'}},
+    }
+
 marks_confidence={
         0: {'label': '0%', 'style': {'color': 'black'}},
         0.1: {'label': '10%', 'style': {'color': 'black'}},
@@ -300,9 +309,9 @@ Z_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
-                            value=7,
-                            marks=marks_accuracy,
+                        dcc.Slider(min=0.005, max=0.5, step=0.005,
+                            value=0.05,
+                            marks=marks_interval,
                             included=False,
                             id="z_test_rev_samples_diff",
                             tooltip={"placement": "top", "always_visible": True},
@@ -381,9 +390,9 @@ Z_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
-                            value=7,
-                            marks=marks_accuracy,
+                        dcc.Slider(min=0.005, max=0.5, step=0.005,
+                            value=0.05,
+                            marks=marks_interval,
                             included=False,
                             id="z_test_rev_confidence_diff",
                             tooltip={"placement": "top", "always_visible": True},
@@ -520,9 +529,9 @@ T_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
-                            value=7,
-                            marks=marks_accuracy,
+                        dcc.Slider(min=0.005, max=0.5, step=0.005,
+                            value=0.05,
+                            marks=marks_interval,
                             included=False,
                             id="t_test_rev_confidence_diff",
                             tooltip={"placement": "top", "always_visible": True},
@@ -637,9 +646,9 @@ LOOSE_LANGFORD_TEST_REV_SAMPLES = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
-                            value=7,
-                            marks=marks_accuracy,
+                        dcc.Slider(min=0.005, max=0.5, step=0.005,
+                            value=0.05,
+                            marks=marks_interval,
                             included=False,
                             id="loose_langford_rev_samples_diff",
                             tooltip={"placement": "top", "always_visible": True},
@@ -703,9 +712,9 @@ LOOSE_LANGFORD_TEST_REV_CONFIDENCE = html.Div(children=[
                             "size": 12, "offset": 0})),
                     dbc.Row(dbc.Col(
                         
-                        dcc.Slider(min=0.5, max=99.5, step=0.5, 
-                            value=7,
-                            marks=marks_accuracy,
+                        dcc.Slider(min=0.005, max=0.5, step=0.005,
+                            value=0.05,
+                            marks=marks_interval,
                             included=False,
                             id="loose_langford_rev_confidence_diff",
                             tooltip={"placement": "top", "always_visible": True},

@@ -45,6 +45,32 @@ def ci_callback(sample_size, accuracy, confidence_level, method, n_splits=None):
     return divs, plot
 
 
+def sample_size_callback(interval_radius, confidence_level, method, n_splits=None):
+    sample_size = cp.estimate_sample_size(
+        interval_radius, confidence_level, method=method, n_splits=n_splits
+    )
+    return html.Div(
+        f"The estimated number of samples needed to obtain a {round(confidence_level*100, 0)}% confidence "
+        f"interval with a {interval_radius} radius is : {sample_size}"
+    )
+
+
+def confidence_level_callback(
+    sample_size, interval_radius, method, n_splits=None, accuracies=None
+):
+    confidence_level = cp.estimate_confidence_level(
+        sample_size,
+        interval_radius,
+        method=method,
+        n_splits=n_splits,
+        accuracies=accuracies,
+    )
+    return html.Div(
+        f"The estimated confidence level of an {interval_radius} radius "
+        f"interval is : {confidence_level*100:.1f}%"
+    )
+
+
 def plot_confidence_interval(confidence_intervals):
     layout_ = go.Layout(
         {
