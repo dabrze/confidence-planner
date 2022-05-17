@@ -5,7 +5,7 @@ with open("README.md", "r", encoding='UTF8') as fh:
 
 setuptools.setup(
     name="confidence-planner",
-    version="0.1.2",
+    version="0.1.3",
     author="Antoni Klorek, Karol Roszak, Dariusz Brzezinski",
     author_email="dariusz.brzezinski@cs.put.poznan.pl",
     description="A Python library for estimating confidence intervals around accuracy and sample sizes for "
