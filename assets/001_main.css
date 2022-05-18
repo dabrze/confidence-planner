@@ -1,0 +1,147 @@
+/* General styling: */
+
+body {
+  font-family: "Open Sans", sans-serif;
+  color: #333333;
+}
+
+a {
+  color: #2487ce;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #469fdf;
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Raleway", sans-serif;
+}
+
+h1.landing-header, h2.landing-header, h3.landing-header {
+  font-family: "Poppins", sans-serif;
+}
+
+#hero h1 {
+    margin: 0;
+    font-size: 56px;
+    font-weight: 700;
+    line-height: 72px;
+    color: #124265;
+    font-family: "Poppins", sans-serif;
+}
+
+.dropdown-menu h6 {
+  font-weight: 600;
+}
+
+#hero-lead {
+  margin: 20px 20px 30px 20px;
+  font-size: 1.20rem;
+  font-weight: 400;
+}
+
+#hero-action-buttons .dropdown-menu {
+  transform: none !important;
+  top: inherit !important;
+}
+
+#hero-ci-button button, #hero-ci-button button.btn-primary:hover,
+#hero-ci-button button.btn-primary:active, #hero-ci-button button.btn-primary:visited {
+  background-color: #5bd4ff !important;
+  border-color: #5bd4ff !important;
+
+}
+
+#hero-sample-size-button button, #hero-sample-size-button button.btn-primary:hover,
+#hero-sample-size-button button.btn-primary:active, #hero-sample-size-button button.btn-primary:visited {
+  background-color: #38b2ff !important;
+  border-color: #38b2ff !important;
+}
+
+#hero-confidence-level-button button, #hero-confidence-level-button button.btn-primary:hover,
+#hero-confidence-level-button button.btn-primary:active, #hero-confidence-level-button button.btn-primary:visited {
+  background-color: #2589e5 !important;
+  border-color: #2589e5 !important;
+}
+
+.footer-text {
+  font-size: 0.8rem;
+}
+
+.estimation-panel {
+  text-align: center;
+  margin-top: 30px;
+}
+
+.estimation-panel h2 {
+    margin-bottom: 16px;
+}
+
+.estimation-panel h4 {
+    margin-top: 20px;
+}
+
+.estimation-panel p {
+    margin-bottom: 0;
+}
+
+/*H2{*/
+/*  text-align: center;*/
+/*  margin: 2% 0 2% 0;*/
+/*}*/
+
+/*Footer{*/
+/*  text-align: center;*/
+/*}*/
+
+/*.website_background {*/
+/*  background: rgb(255,255,255);*/
+/*  background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,245,245,1) 100%);*/
+/*  display: block;*/
+/*}*/
+
+/*!* Right and Left panel from test pages *!*/
+
+/*.left_pane {*/
+/*  background-color: #78c1ff;*/
+/*  color: white;*/
+/*  border-radius: 20px;*/
+/*  border-style: solid;*/
+/*  border-width: 2px;*/
+/*  margin: 5px*/
+/*}*/
+
+/*.left_pane_content {*/
+/*  margin: 4px;*/
+/*}*/
+
+/*.right_pane {*/
+/*  background-color: #78c1ff;*/
+/*  color: white;*/
+/*  border-radius: 20px;*/
+/*  border-style: solid;*/
+/*  border-width: 2px;*/
+/*  margin: 5px*/
+/*}*/
+
+/*.right_pane_content {*/
+/*  text-align: center;*/
+/*  margin: 4px;*/
+/*}*/
+
+/*!* sliders: *!*/
+
+/*.rc-slider-handle {*/
+/*  background-color: #2871cc;*/
+/*  border-color: rgb(102, 107, 255);*/
+/*}*/
+
+/*.rc-slider-handle:hover {*/
+/*  border-color: rgb(173, 176, 255);*/
+/*}*/
+
+/*.calculate_button{*/
+/*  background-color: #2871cc;*/
+/*}*/
