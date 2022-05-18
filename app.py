@@ -144,7 +144,6 @@ app.layout = html.Div(
             id="page_content",
             className="page_content",
         ),
-        # layouts.elements['footer'],
     ],
 )
 
@@ -170,97 +169,37 @@ def display_page(pathname):
             )
 
 
-##########################################
-# Confidence interval estimation callbacks
-##########################################
-
-
 for method in ['holdout_wilson', 'holdout_langford', 'holdout_clopper_pearson', 'holdout_z_test', 'holdout_t_test',
                'progressive', 'cv', 'bootstrap']:
     app.callback(
-        Output(f"{method}_result", "children"),
-        Output(f"{method}_result_graph", "figure"),
-        Input(f"{method}_sample", "value"),
-        Input(f"{method}_accuracy", "value"),
-        Input(f"{method}_confidence", "value"),
-        Input(f"{method}", "id"),
-        Input(f"{method}_folds", "value"),
+        Output(f"ci_{method}_result", "children"),
+        Output(f"ci_{method}_result_graph", "figure"),
+        Input(f"ci_{method}_sample", "value"),
+        Input(f"ci_{method}_accuracy", "value"),
+        Input(f"ci_{method}_confidence", "value"),
+        Input(f"ci_{method}", "id"),
+        Input(f"ci_{method}_folds", "value"),
     )(ci_callback)
 
 
-##########################################
-# Sample size estimation callbacks
-##########################################
+for method in ['holdout_langford', 'holdout_z_test', 'progressive', 'cv', 'bootstrap']:
+    app.callback(
+        Output(f"sample_size_{method}_result", "children"),
+        Input(f"sample_size_{method}_interval_radius", "value"),
+        Input(f"sample_size_{method}_confidence", "value"),
+        Input(f"sample_size_{method}", "id"),
+        Input(f"sample_size_{method}_folds", "value"),
+    )(sample_size_callback)
 
 
-@app.callback(
-    Output("z_test_rev_samples_result", "children"),
-    Input("z_test_rev_samples_button", "n_clicks"),
-    State("z_test_rev_samples_diff", "value"),
-    State("z_test_rev_samples_confidence", "value"),
-    prevent_initial_call=False,
-)
-def sample_size_holdout_z_test(n_clicks, interval_radius, confidence_level):
-    return sample_size_callback(
-        interval_radius, confidence_level, method="holdout_z_test"
-    )
-
-
-@app.callback(
-    Output("loose_langford_rev_samples_result", "children"),
-    Input("loose_langford_rev_samples_button", "n_clicks"),
-    State("loose_langford_rev_samples_diff", "value"),
-    State("loose_langford_rev_samples_confidence", "value"),
-    prevent_initial_call=False,
-)
-def sample_size_holdout_langford(n_clicks, interval_radius, confidence_level):
-    return sample_size_callback(
-        interval_radius, confidence_level, method="holdout_langford"
-    )
-
-
-##########################################
-# Confidence level estimation callbacks
-##########################################
-
-
-@app.callback(
-    Output("z_test_rev_confidence_result", "children"),
-    Input("z_test_rev_confidence_button", "n_clicks"),
-    State("z_test_rev_confidence_sample", "value"),
-    State("z_test_rev_confidence_diff", "value"),
-    prevent_initial_call=False,
-)
-def reverse_z_test_confidence_callback(n_clicks, sample_size, interval_radius):
-    return confidence_level_callback(
-        sample_size, interval_radius, method="holdout_z_test"
-    )
-
-
-@app.callback(
-    Output("t_test_rev_confidence_result", "children"),
-    Input("t_test_rev_confidence_button", "n_clicks"),
-    State("t_test_rev_confidence_sample", "value"),
-    State("t_test_rev_confidence_diff", "value"),
-    prevent_initial_call=False,
-)
-def reverse_t_test_confidence_callback(n_clicks, sample_size, interval_radius):
-    return confidence_level_callback(
-        sample_size, interval_radius, method="holdout_t_test"
-    )
-
-
-@app.callback(
-    Output("loose_langford_rev_confidence_result", "children"),
-    Input("loose_langford_rev_confidence_button", "n_clicks"),
-    State("loose_langford_rev_confidence_sample", "value"),
-    State("loose_langford_rev_confidence_diff", "value"),
-    prevent_initial_call=False,
-)
-def reverse_loose_langford_confidence_callback(n_clicks, sample_size, interval_radius):
-    return confidence_level_callback(
-        sample_size, interval_radius, method="holdout_langford"
-    )
+for method in ['holdout_langford', 'holdout_z_test', 'holdout_t_test', 'progressive', 'cv', 'bootstrap']:
+    app.callback(
+        Output(f"confidence_level_{method}_result", "children"),
+        Input(f"confidence_level_{method}_sample", "value"),
+        Input(f"confidence_level_{method}_interval_radius", "value"),
+        Input(f"confidence_level_{method}", "id"),
+        Input(f"confidence_level_{method}_folds", "value"),
+    )(confidence_level_callback)
 
 
 if __name__ == "__main__":
