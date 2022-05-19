@@ -52,6 +52,28 @@ More code examples (including cross-validation and bootstrapping) can be found i
 
 ## Methods
 
+**Holdout methods** Confidence and sample size estimations for accuracy on holdout test sets can be done with multiple methods.
+The simplest method is to assume a normal distribution of the classifiers accuracy and then use the Z-test or t-test \[1\]. However,
+there exist good approximations directly for binomial (0-1 loss) distribution. The Wilson method \[5\] offers the tightest confidence bounds
+but might be slightly less reliable when accuracy is very close to 0.0 or 1.0. The Clopper-Pearson approximation \[4\] is more conservative, and the
+Langford approximation \[1\] (based on the Hoeffding inequality) is the most conservative. For sample size and confidence level 
+estimation, only the Langford and normal-distribution approximations are available.
+
+**Cross-Validation method** Estimations for k-fold cross-validation experiments can be done using Blum's method \[2\]. This
+ approximation is based on the Hoeffding inequality and is very conservative. It boils down to the fact that the confidence
+ of k-fold experiment is no worse than a 1/k holdout experiment. Therefore, increasing the number of folds will make the
+ confidence intervals wider.
+ 
+**Bootstrap method** To estimate the confidence interval or confidence level of a bootstrapping experiment one can calculate
+the percentiles of accuracies from all the bootstraps \[3\]. The larger the number of bootstraps, the more reliable the estimation will be. 
+To estimate the sample size, one can assume a normal distribution of the bootstrap results and use the Z-test method.
+
+**Progressive validation** Progressive validation is also known as time series validation, rolling validation, or the 
+test-then-train method. In case of progressive validation experiments, one can use Langford's approximation and 
+provide the size of the entire (rolled) dataset as the sample size \[2\].
+
+Below a summary of the methods that can be used for different estimation tasks.
+
 ![Map of estimation methods](examples/img/map.svg)
 
 ## References
