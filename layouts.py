@@ -2,32 +2,8 @@ from click import style
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
-
-import components.texts as texts
 from util import create_estimation_form
 
-marks_interval={
-        0: {'label': '0%', 'style': {'color': 'black'}},
-        0.1: {'label': '10%', 'style': {'color': 'black'}},
-        0.2: {'label': '20%', 'style': {'color': 'black'}},
-        0.3: {'label': '30%', 'style': {'color': 'black'}},
-        0.4: {'label': '40%', 'style': {'color': 'black'}},
-        0.5: {'label': '50%', 'style': {'color': 'black'}},
-    }
-
-marks_confidence={
-        0: {'label': '0%', 'style': {'color': 'black'}},
-        0.1: {'label': '10%', 'style': {'color': 'black'}},
-        0.2: {'label': '20%', 'style': {'color': 'black'}},
-        0.3: {'label': '30%', 'style': {'color': 'black'}},
-        0.4: {'label': '40%', 'style': {'color': 'black'}},
-        0.5: {'label': '50%', 'style': {'color': 'black'}},
-        0.6: {'label': '60%', 'style': {'color': 'black'}},
-        0.7: {'label': '70%', 'style': {'color': 'black'}},
-        0.8: {'label': '80%', 'style': {'color': 'black'}},
-        0.9: {'label': '90%', 'style': {'color': 'black'}},
-        1: {'label': '100%', 'style': {'color': 'black'}},
-    }
 
 ci_links = [
     dbc.DropdownMenuItem("Holdout", header=True),
@@ -56,7 +32,7 @@ sample_size_links = [
     dbc.DropdownMenuItem("Blum", href="/sample_size_cv"),
     dbc.DropdownMenuItem(divider=True),
     dbc.DropdownMenuItem("Bootstrapping", header=True),
-    dbc.DropdownMenuItem("Percentiles", href="/sample_size_bootstrap"),
+    dbc.DropdownMenuItem("Z-test", href="/sample_size_bootstrap"),
     dbc.DropdownMenuItem(divider=True),
     dbc.DropdownMenuItem("Progressive validation", header=True),
     dbc.DropdownMenuItem("Langford progressive", href="/sample_size_progressive"),
@@ -107,29 +83,118 @@ navbar = dbc.NavbarSimple(
     brand_href="/home",
 )
 
-elements = {
-    'navbar': navbar,
-    # 'sidebar': sidebar,
-    'footer': html.Footer(html.P('Copyright 2022, Poznan University of Technology.', className='footer-text')),
-    '/ci_holdout_wilson': create_estimation_form("ci", "Holdout Wilson", "holdout_wilson", texts.wilson_text, 100),
-    '/ci_holdout_clopper_pearson': create_estimation_form("ci", "Holdout Clopper-Pearson", "holdout_clopper_pearson", texts.clopper_pearson_text, 100),
-    '/ci_holdout_langford': create_estimation_form("ci", "Holdout Langford", "holdout_langford", texts.loose_langford_text, 100),
-    '/ci_holdout_z_test': create_estimation_form("ci", "Holdout Z-test", "holdout_z_test", texts.z_test_text, 50),
-    '/ci_holdout_t_test': create_estimation_form("ci", "Holdout t-test", "holdout_t_test", texts.t_test_text, 25),
-    '/ci_progressive': create_estimation_form("ci", "Progressive validation", "progressive", texts.progressive_validation_text, 300),
-    '/ci_cv': create_estimation_form("ci", "Cross-validation", "cv", texts.cross_validation_text, 500, n_splits=10),
-    '/ci_bootstrap': create_estimation_form("ci", "Bootstrapping", "bootstrap", texts.bootstrap_text, 20, accuracy='0.48816081929448714,0.5114709379333421,0.48965710829479676,0.4974254738927312,0.482690776015456,0.48998736540599175,0.4993842963069065,0.4961912108773732,0.508291825511268,0.4877569233805326,0.48118148168598296,0.4996073070469448,0.52654630031446054,0.5022854894045708,0.49882020732992565,0.52362079495748944,0.5065141753519736,0.49240679510693,0.4941949423340501,0.4987517007791748,0.50361147539058706,0.5155906551034035,0.5030881438235992,0.4936394118427662,0.503656429452781,0.5009448246004594,0.4925057762446265,0.49936815425902495,0.4934037929543002,0.5093328650923615,0.49305816916146895,0.4946163639595628,0.5008023376306553,0.5154222936632961,0.5063290402049816,0.5014251782692496,0.5137857859269866,0.512492371738837,0.4936233661933695,0.5015461644572862,0.4981650467132479,0.4863393898242631,0.4893700517753274,0.5134078859448949,0.49381009308535916,0.5110882324683109,0.510843922475742,0.49724939225615906,0.50198142644277645,0.4929213417184266'),
+descriptions_dict = {
+    'holdout_wilson': 'TODO',
+    'holdout_langford': 'TODO',
+    'holdout_clopper_pearson': 'TODO',
+    'holdout_z_test': 'TODO',
+    'holdout_t_test': 'TODO',
+    'progressive': 'TODO',
+    'cv': 'TODO',
+    'bootstrap': 'TODO',
+    'about': '''
+The **Prediction Confidence Planner** application provides different methods for calculating confidence interval for obtained accuracy from different training techniques. The aim of the confidence interval is to measure the degree of uncertainty or certainty in a sampling method. There are four available options and number of tests to choose from.
 
-    '/sample_size_langford': create_estimation_form("sample_size", "Holdout Langford", "holdout_langford", "TODO"),
-    '/sample_size_z_test': create_estimation_form("sample_size", "Holdout Z-test", "holdout_z_test", "TODO"),
-    '/sample_size_cv': create_estimation_form("sample_size", "Cross-validation", "cv", "TODO", n_splits=10),
-    '/sample_size_bootstrap': create_estimation_form("sample_size", "Bootstrapping", "bootstrap", "TODO"),
-    '/sample_size_progressive': create_estimation_form("sample_size", "Progressive validation", "progressive", "TODO"),
+### Contributors
+ - Antoni Klorek, Poznan University of Technology
+ - Karol Roszak, Poznan University of Technology
+ - Dariusz Brzezinski, Poznan University of Technology''',
+    'methods': """
+**Holdout methods** - Holdout  is  when  one  splits  up  a  dataset  into  a  "train"  and "test"  set.  The  training  set  is  what  the  model  is  trained  on,  and  the  test  set is  used  to  see  how  well  that  model  performs  on  unseen  data.
 
-    '/confidence_level_langford': create_estimation_form("confidence_level", "Holdout Langford", "holdout_langford", "TODO", 100),
-    '/confidence_level_z_test': create_estimation_form("confidence_level", "Holdout Z-test", "holdout_z_test", "TODO", 50),
-    '/confidence_level_t_test': create_estimation_form("confidence_level", "Holdout t-test", "holdout_t_test", "TODO", 25),
-    '/confidence_level_cv': create_estimation_form("confidence_level", "Cross-validation", "cv", "TODO", 500, n_splits=10),
-    '/confidence_level_bootstrap': create_estimation_form("confidence_level", "Bootstrapping", "bootstrap", 20, "TODO"),
-    '/confidence_level_progressive': create_estimation_form("confidence_level", "Progressive validation", 500, "progressive", "TODO"),
+**Bootstrap method** - Bootstrap is a resampling method by independently  sampling  with  replacement  from  an  existing  sample  data  with same sample size n, and performing inference among these resampled data.
+
+**Cross-Validation method** - Cross-validation or "k-fold cross-validation" is when the dataset is randomly split up into k groups. One of the groups is used as the test set and the rest are used as the training set. The model is trained on the training set and scored on the test set. Then, the process is repeated until each unique group has been used as the test set.
+
+**Progressive Validation method** - Progressive validation starts by first learning a hypothesis on the training set and then testing on the first example of the test set. Then, we train on the training set plus the first example of the test set and test on the second example of the test set. The process then continues. The progressive validation technique is used in data streams.""",
+    "references": '''
+1. Langford J. (2005) Tutorial on practical prediction theory for classification. *Journal of Machine Learning Research* 6, 273–306, [link](https://www.jmlr.org/papers/volume6/langford05a/langford05a.pdf).
+2. Blum A., Kalai, A., Langford, J. (1999) Beating the hold-out: Bounds for k-fold and progressive cross-validation. *Proceedings of the Twelfth Annual Conference on Computational Learning Theory, COLT 1999*, pp. 203–208, [link](https://www.ri.cmu.edu/pub_files/pub1/blum_a_1999_1/blum_a_1999_1.pdf).
+3. Puth M.T., Neuhauser M., Ruxton G.(2015) On the variety of methods for calculating confidence intervals by bootstrapping. *The Journal of Animal Ecology* 84, [link](https://doi.org/10.1111/1365-2656.12382).
+4. Clopper C.J., Pearson E.S. (1934) The use of confidence or fiducial limits illustrated in the case of the binomial. *Biometrika* 26(4), 404–413, [link](http://www.jstor.org/stable/2331986).
+5. Wilson E.B. (1927) Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association* 22(158), 209–212, [link](http://www.jstor.org/stable/2276774).
+'''
 }
+
+webpages_dict = {
+    'navbar': navbar,
+    'footer': html.Footer(html.P("Copyright 2022, Poznan University of Technology.", className="footer-text")),
+    '/ci_holdout_wilson': create_estimation_form("ci", "Holdout Wilson", "holdout_wilson", descriptions_dict["holdout_wilson"], 100),
+    '/ci_holdout_clopper_pearson': create_estimation_form("ci", "Holdout Clopper-Pearson", "holdout_clopper_pearson", descriptions_dict["holdout_clopper_pearson"], 100),
+    '/ci_holdout_langford': create_estimation_form("ci", "Holdout Langford", "holdout_langford", descriptions_dict["holdout_langford"], 100),
+    '/ci_holdout_z_test': create_estimation_form("ci", "Holdout Z-test", "holdout_z_test", descriptions_dict["holdout_z_test"], 50),
+    '/ci_holdout_t_test': create_estimation_form("ci", "Holdout t-test", "holdout_t_test", descriptions_dict["holdout_t_test"], 25),
+    '/ci_progressive': create_estimation_form("ci", "Progressive validation", "progressive", descriptions_dict["progressive"], 300),
+    '/ci_cv': create_estimation_form("ci", "Cross-validation", "cv", descriptions_dict["cv"], 500, n_splits=10),
+    '/ci_bootstrap': create_estimation_form("ci", "Bootstrapping", "bootstrap", descriptions_dict["bootstrap"], 20, accuracy='0.48, 0.51, 0.48, 0.49, 0.48, 0.48, 0.49, 0.49, 0.50, 0.48, 0.48, 0.49, 0.62, 0.70, 0.69, 0.52, 0.50, 0.49, 0.49, 0.49, 0.50, 0.51, 0.50, 0.49, 0.50, 0.50, 0.49, 0.49, 0.49, 0.50, 0.49, 0.49, 0.50, 0.51, 0.50, 0.50, 0.51, 0.51, 0.49, 0.50, 0.49, 0.49, 0.49, 0.51, 0.49, 0.51, 0.51, 0.49, 0.50, 0.49'),
+    '/sample_size_langford': create_estimation_form("sample_size", "Holdout Langford", "holdout_langford", descriptions_dict["holdout_langford"]),
+    '/sample_size_z_test': create_estimation_form("sample_size", "Holdout Z-test", "holdout_z_test", descriptions_dict["holdout_z_test"]),
+    '/sample_size_cv': create_estimation_form("sample_size", "Cross-validation", "cv", descriptions_dict["cv"], n_splits=10),
+    '/sample_size_bootstrap': create_estimation_form("sample_size", "Bootstrapping", "bootstrap", descriptions_dict["bootstrap"]),
+    '/sample_size_progressive': create_estimation_form("sample_size", "Progressive validation", "progressive", descriptions_dict["progressive"]),
+
+    '/confidence_level_langford': create_estimation_form("confidence_level", "Holdout Langford", "holdout_langford", descriptions_dict["holdout_langford"], 100),
+    '/confidence_level_z_test': create_estimation_form("confidence_level", "Holdout Z-test", "holdout_z_test", descriptions_dict["holdout_z_test"], 50),
+    '/confidence_level_t_test': create_estimation_form("confidence_level", "Holdout t-test", "holdout_t_test", descriptions_dict["holdout_t_test"], 25),
+    '/confidence_level_cv': create_estimation_form("confidence_level", "Cross-validation", "cv", descriptions_dict["cv"], 500, n_splits=10),
+    '/confidence_level_bootstrap': create_estimation_form("confidence_level", "Bootstrapping", "bootstrap", descriptions_dict["bootstrap"], 20, accuracy='0.48, 0.51, 0.48, 0.49, 0.48, 0.48, 0.49, 0.49, 0.50, 0.48, 0.48, 0.49, 0.62, 0.70, 0.69, 0.52, 0.50, 0.49, 0.49, 0.49, 0.50, 0.51, 0.50, 0.49, 0.50, 0.50, 0.49, 0.49, 0.49, 0.50, 0.49, 0.49, 0.50, 0.51, 0.50, 0.50, 0.51, 0.51, 0.49, 0.50, 0.49, 0.49, 0.49, 0.51, 0.49, 0.51, 0.51, 0.49, 0.50, 0.49'),
+    '/confidence_level_progressive': create_estimation_form("confidence_level", "Progressive validation", "progressive", descriptions_dict["progressive"], 500),
+}
+
+
+def create_home_page(app):
+    return html.Div(
+    children=[
+        dbc.Jumbotron(
+            [
+                dbc.Container(
+                    [
+                        html.H1("Confidence planner"),
+                        html.P(
+                            [
+                                html.Span("This application offers eight different procedures that will help you "
+                                          "determine and justify prediction confidence intervals, test set sizes, "
+                                          "and confidence levels from holdout, bootstrap, cross-validation, and "
+                                          "progressive validation experiments. Use the menu or the buttons below to "
+                                          "start estimating. If you would rather estimate directly in your code, "
+                                          "take a look at the confidence-planner python package available on "),
+                                html.A("GitHub", href="https://github.com/dabrze/confidence-planner"),
+                                html.Span(".")
+                            ],
+                            id="hero-lead",
+                        ),
+                        html.Div(
+                            [
+                                dbc.DropdownMenu(
+                                    ci_links, label="Confidence interval", color="primary", className="m-1", id="hero-ci-button"
+                                ),
+                                dbc.DropdownMenu(
+                                    sample_size_links, label="Sample size", color="primary", className="m-1", id="hero-sample-size-button"
+                                ),
+                                dbc.DropdownMenu(
+                                    confidence_level_links, label="Confidence level", color="primary", className="m-1", id="hero-confidence-level-button"
+                                )
+                            ], style={"display": "inline-flex", "flexWrap": "wrap"}, id="hero-action-buttons"
+                        ),
+                    ], className="text-center"),
+            ], id="hero"
+        ),
+        dbc.Container(
+            [
+                html.H2("Estimation methods", className="landing-header"),
+                dbc.Row(
+                    [
+                        dbc.Col(dcc.Markdown(descriptions_dict["methods"]), md=5, sm=12),
+                        dbc.Col(html.Img(src=app.get_asset_url("map.svg"), alt="Map of estimation methods",
+                                         style={"width": "100%"}),
+                                md=7, sm=12),
+                    ]
+                ),
+                html.H2("About", className="landing-header"),
+                dcc.Markdown(descriptions_dict["about"]),
+                html.H2("References", className="landing-header"),
+                dcc.Markdown(descriptions_dict["references"])
+            ]),
+    ],
+    id="home",
+)

@@ -1,4 +1,4 @@
-# Graph generation imports
+import numpy as np
 import confidence_planner as cp
 import plotly.graph_objects as go
 import plotly.express as px
@@ -72,13 +72,17 @@ def ci_callback(sample_size, accuracy, confidence_level, task_method, n_splits=N
 
     if method == "bootstrap":
         accuracy = [float(accuracy) for accuracy in accuracy.split(",")]
+        mean_accuracy = np.mean(accuracy)
+    else:
+        mean_accuracy = accuracy
 
     intervals = calculate_multiple_ci(
         sample_size, accuracy, confidence_level, method=method, n_splits=n_splits
     )
     divs = [
-        html.P(f"For the obtained accuracy of {accuracy} on a holdout test set of {sample_size} examples, "
-               f"the confidence intervals are:", style={"margin-bottom": "14px"})
+        dcc.Markdown(f"For a **mean accuracy of {mean_accuracy:.2f}** obtained on **{method.split('_')[0]}** test "
+                     f"data consisting of a total of **{sample_size} examples**, the confidence intervals are:",
+                     style={"margin-bottom": "14px"})
     ]
 
     for level, interval in intervals:
@@ -98,28 +102,44 @@ def sample_size_callback(interval_radius, confidence_level, task_method, n_split
     sample_size = cp.estimate_sample_size(
         interval_radius, confidence_level, method=method, n_splits=n_splits
     )
-    return html.Div(
-        f"The estimated number of samples needed to obtain a {round(confidence_level*100, 0)}% confidence "
-        f"interval with a {interval_radius} radius is : {sample_size}"
-    )
+
+    if n_splits is None:
+        return dcc.Markdown(
+            f"The estimated number of samples needed to obtain a **{round(confidence_level*100, 0)}% confidence "
+            f"interval* with a **{interval_radius} radius** is: **{sample_size} samples.**"
+        )
+    else:
+        return dcc.Markdown(
+            f"The estimated number of samples needed to obtain a {round(confidence_level * 100, 0)}% confidence "
+            f"interval with a {interval_radius} radius is : {sample_size}."
+        )
 
 
 def confidence_level_callback(
-    sample_size, interval_radius, task_method, n_splits=None, accuracies=None
+    sample_size, interval_radius, task_method, n_splits=None, accuracy=None
 ):
     method = task_method[len("confidence_level_"):]
+    if method == "bootstrap":
+        accuracy = [float(accuracy) for accuracy in accuracy.split(",")]
 
     confidence_level = cp.estimate_confidence_level(
         sample_size,
         interval_radius,
         method=method,
         n_splits=n_splits,
-        accuracies=accuracies,
+        accuracies=accuracy,
     )
-    return html.Div(
-        f"The estimated confidence level of an {interval_radius} radius "
-        f"interval is : {confidence_level*100:.1f}%"
-    )
+
+    if n_splits is None:
+        return dcc.Markdown(
+            f"The estimated confidence level of an **{interval_radius} radius** "
+            f"interval is : **{confidence_level*100:.1f}%**."
+        )
+    else:
+        return dcc.Markdown(
+            f"The estimated confidence level of  **{n_splits}-fold** cross-validation with an "
+            f"**{interval_radius} radius** interval is : **{confidence_level*100:.1f}%**."
+        )
 
 
 def create_estimation_form(task, name, method, description, sample_size=None, accuracy=0.75, confidence_level=0.8,
@@ -141,9 +161,9 @@ def create_input_panel(task, name, method, description, sample_size, accuracy, c
 
     # Number of samples
     if task == "ci" or task == "confidence_level":
-        elements.append(html.H4("Number of samples", style={'display': 'none' if method == 'bootstrap' else 'block'}))
+        elements.append(html.H4("Number of samples"))
         elements.append(dcc.Input(type='number', min=1, placeholder='Number of samples', value=sample_size,
-                                  id=f"{task}_{method}_sample", style={'display': 'none' if method == 'bootstrap' else 'block'}))
+                                  id=f"{task}_{method}_sample"))
 
     # Number of folds
     elements.append(html.H4("Number of folds", style={'display': 'none' if n_splits is None else 'block'}))
@@ -151,12 +171,11 @@ def create_input_panel(task, name, method, description, sample_size, accuracy, c
                               id=f"{task}_{method}_folds", style={'display': 'none' if n_splits is None else 'block'}))
 
     # Accuracy
-    if task == "ci":
+    if task == "ci" or (task == "confidence_level" and method == "bootstrap"):
         elements.append(html.H4("List of bootstrap accuracies" if method == 'bootstrap' else "Accuracy"))
         elements.append(
             dcc.Input(type='text', placeholder='Comma-separated list of accuracies',
-                      value='0.48816081929448714,0.5114709379333421,0.48965710829479676,0.4974254738927312,0.482690776015456,0.48998736540599175,0.4993842963069065,0.4961912108773732,0.508291825511268,0.4877569233805326,0.48118148168598296,0.4996073070469448,0.52654630031446054,0.5022854894045708,0.49882020732992565,0.52362079495748944,0.5065141753519736,0.49240679510693,0.4941949423340501,0.4987517007791748,0.50361147539058706,0.5155906551034035,0.5030881438235992,0.4936394118427662,0.503656429452781,0.5009448246004594,0.4925057762446265,0.49936815425902495,0.4934037929543002,0.5093328650923615,0.49305816916146895,0.4946163639595628,0.5008023376306553,0.5154222936632961,0.5063290402049816,0.5014251782692496,0.5137857859269866,0.512492371738837,0.4936233661933695,0.5015461644572862,0.4981650467132479,0.4863393898242631,0.4893700517753274,0.5134078859448949,0.49381009308535916,0.5110882324683109,0.510843922475742,0.49724939225615906,0.50198142644277645,0.4929213417184266',
-                      id=f"{task}_{method}_accuracy") if method == 'bootstrap' else
+                      value=accuracy, id=f"{task}_{method}_accuracy") if method == 'bootstrap' else
             dcc.Slider(min=0, max=1, step=0.005, value=accuracy, marks=marks_accuracy, included=False,
                        id=f"{task}_{method}_accuracy", tooltip={"placement": "top", "always_visible": True},)
         )

@@ -19,6 +19,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1.landing-header, h2.landing-header, h3.landing-header {
   font-family: "Poppins", sans-serif;
+    text-align: center;
 }
 
 #hero h1 {
@@ -65,7 +66,10 @@ h1.landing-header, h2.landing-header, h3.landing-header {
 }
 
 .footer-text {
-  font-size: 0.8rem;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 0.8rem;
+    text-align: center;
 }
 
 .estimation-panel {
