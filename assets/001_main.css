@@ -18,8 +18,9 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1.landing-header, h2.landing-header, h3.landing-header {
-  font-family: "Poppins", sans-serif;
+    font-family: "Poppins", sans-serif;
     text-align: center;
+    margin-bottom: 14px;
 }
 
 #home {
@@ -96,4 +97,8 @@ h1.landing-header, h2.landing-header, h3.landing-header {
 
 .estimation-panel p {
     margin-bottom: 0;
+}
+
+.method-description {
+    text-align: justify;
 }

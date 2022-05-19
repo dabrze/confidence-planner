@@ -1,49 +1,11 @@
 import numpy as np
 import confidence_planner as cp
 import plotly.graph_objects as go
-import plotly.express as px
 import dash_bootstrap_components as dbc
 import dash_core_components as dcc
 import dash_html_components as html
 
-palette = ["#cc6677", "#f6cf71", "#0f8554", "#1d6996", "#ff9900"]
-
-marks_accuracy = {
-    0:   {'label': '0.0', 'style': {'color': 'black'}},
-    0.1: {'label': '0.1', 'style': {'color': 'black'}},
-    0.2: {'label': '0.2', 'style': {'color': 'black'}},
-    0.3: {'label': '0.3', 'style': {'color': 'black'}},
-    0.4: {'label': '0.4', 'style': {'color': 'black'}},
-    0.5: {'label': '0.5', 'style': {'color': 'black'}},
-    0.6: {'label': '0.6', 'style': {'color': 'black'}},
-    0.7: {'label': '0.7', 'style': {'color': 'black'}},
-    0.8: {'label': '0.8', 'style': {'color': 'black'}},
-    0.9: {'label': '0.9', 'style': {'color': 'black'}},
-    1.0: {'label': '1.0', 'style': {'color': 'black'}}
-}
-
-marks_interval={
-    0: {'label': '0.0', 'style': {'color': 'black'}},
-    0.1: {'label': '0.1', 'style': {'color': 'black'}},
-    0.2: {'label': '0.2', 'style': {'color': 'black'}},
-    0.3: {'label': '0.3', 'style': {'color': 'black'}},
-    0.4: {'label': '0.4', 'style': {'color': 'black'}},
-    0.5: {'label': '0.5', 'style': {'color': 'black'}},
-}
-
-marks_confidence = {
-    0: {'label': '0%', 'style': {'color': 'black'}},
-    0.1: {'label': '10%', 'style': {'color': 'black'}},
-    0.2: {'label': '20%', 'style': {'color': 'black'}},
-    0.3: {'label': '30%', 'style': {'color': 'black'}},
-    0.4: {'label': '40%', 'style': {'color': 'black'}},
-    0.5: {'label': '50%', 'style': {'color': 'black'}},
-    0.6: {'label': '60%', 'style': {'color': 'black'}},
-    0.7: {'label': '70%', 'style': {'color': 'black'}},
-    0.8: {'label': '80%', 'style': {'color': 'black'}},
-    0.9: {'label': '90%', 'style': {'color': 'black'}},
-    1: {'label': '100%', 'style': {'color': 'black'}},
-}
+from constants import *
 
 
 def calculate_multiple_ci(
@@ -143,22 +105,28 @@ def confidence_level_callback(
         )
 
 
-def create_estimation_form(task, name, method, description, sample_size=None, accuracy=0.75, confidence_level=0.8,
-                           n_splits=None, interval_radius=0.05, result_title="Estimated confidence intervals"):
+def create_estimation_form(task, name, method, sample_size=None, accuracy=0.75, confidence_level=0.8,
+                           n_splits=None, interval_radius=0.05):
+    if task == "ci":
+        result_title = "Estimated confidence intervals"
+    elif task == "sample_size":
+        result_title = "Estimated sample size"
+    else:
+        result_title = "Estimated confidence level"
+
     return dbc.Container(
         dbc.Row(children=[
-            create_input_panel(task, name, method, description, sample_size, accuracy, confidence_level, n_splits,
-                               interval_radius),
+            create_input_panel(task, name, method, sample_size, accuracy, confidence_level, n_splits, interval_radius),
             create_result_panel(task, method, result_title),
         ], id=f"{task}_{method}")
     )
 
 
-def create_input_panel(task, name, method, description, sample_size, accuracy, confidence_level, n_splits,
+def create_input_panel(task, name, method, sample_size, accuracy, confidence_level, n_splits,
                        interval_radius):
     elements = list()
     elements.append(html.H2(name))
-    elements.append(html.P(description))
+    elements.append(html.P(descriptions_dict[f"{task}_{method}"], className="method-description"))
 
     # Number of samples
     if task == "ci" or task == "confidence_level":
@@ -172,13 +140,21 @@ def create_input_panel(task, name, method, description, sample_size, accuracy, c
                               id=f"{task}_{method}_folds", style={'display': 'none' if n_splits is None else 'block'}))
 
     # Accuracy
-    if task == "ci" or (task == "confidence_level" and method == "bootstrap"):
-        elements.append(html.H4("List of bootstrap accuracies" if method == 'bootstrap' else "Accuracy"))
+    if task == "ci" or task == "confidence_level":
+        if method == "bootstrap" or task == "ci":
+            displayClass = ""
+        else:
+            displayClass = "hidden"
+
+        elements.append(html.H4("List of bootstrap accuracies" if method == 'bootstrap' else "Accuracy",
+                                className=displayClass))
         elements.append(
             dcc.Input(type='text', placeholder='Comma-separated list of accuracies',
-                      value=accuracy, id=f"{task}_{method}_accuracy") if method == 'bootstrap' else
+                      value=accuracy, id=f"{task}_{method}_accuracy", className=displayClass)
+            if method == 'bootstrap' else
             dcc.Slider(min=0, max=1, step=0.005, value=accuracy, marks=marks_accuracy, included=False,
-                       id=f"{task}_{method}_accuracy", tooltip={"placement": "top", "always_visible": True},)
+                       id=f"{task}_{method}_accuracy", tooltip={"placement": "top", "always_visible": True},
+                       className=displayClass)
         )
 
     # Interval radius
@@ -240,7 +216,8 @@ def plot_confidence_interval(confidence_intervals):
 
     fig.update_layout(
         {
-            "yaxis": {"title": "Confidence level", "tickformat": ',.0%', "range": [max(0, confidence_intervals[0][0] - 0.05), 1.0]},
+            "yaxis": {"title": "Confidence level", "tickformat": ',.0%',
+                      "range": [max(0, confidence_intervals[0][0] - 0.05), 1.0]},
             "xaxis": {"title": "Accuracy"},
             "template": "plotly_white",
             "showlegend": False,

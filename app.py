@@ -18,8 +18,8 @@ app = dash.Dash(
     __name__, external_stylesheets=external_theme, suppress_callback_exceptions=True
 )
 server = app.server
-
 layouts.webpages_dict["/home"] = layouts.create_home_page(app)
+app.title = "Confidence planner"
 app.layout = html.Div(
     id="entire_app",
     children=[
