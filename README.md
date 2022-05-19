@@ -80,14 +80,11 @@ Below a summary of the methods that can be used for different estimation tasks.
 
 Confidence-planner methods belong to the field of frequentist statistics.
 
-[1] Langford, J.: Tutorial on practical prediction theory for classification. 
-Journal of Machine Learnining Research 6, 273–306 (2005).
-
-[2] Blum, A., Kalai, A., Langford, J.: Beating the hold-out: Bounds for k-fold and progressive cross-validation. 
-Proceedings of the Twelfth Annual Conference on Computational Learning Theory, COLT (1999).
-
-[3] Puth, M.T., Neuhauser, M., Ruxton, G.: On the variety of methods for calculating confidence intervals by bootstrapping. 
-The Journal of animal ecology 84 (2015).
+1. Langford J. (2005) Tutorial on practical prediction theory for classification. *Journal of Machine Learning Research* 6, 273–306, [link](https://www.jmlr.org/papers/volume6/langford05a/langford05a.pdf).
+2. Blum A., Kalai, A., Langford, J. (1999) Beating the hold-out: Bounds for k-fold and progressive cross-validation. *Proceedings of the Twelfth Annual Conference on Computational Learning Theory, COLT 1999*, pp. 203–208, [link](https://www.ri.cmu.edu/pub_files/pub1/blum_a_1999_1/blum_a_1999_1.pdf).
+3. Puth M.T., Neuhauser M., Ruxton G.(2015) On the variety of methods for calculating confidence intervals by bootstrapping. *The Journal of Animal Ecology* 84, [link](https://doi.org/10.1111/1365-2656.12382).
+4. Clopper C.J., Pearson E.S. (1934) The use of confidence or fiducial limits illustrated in the case of the binomial. *Biometrika* 26(4), 404–413, [link](http://www.jstor.org/stable/2331986).
+5. Wilson E.B. (1927) Probable inference, the law of succession, and statistical inference. *Journal of the American Statistical Association* 22(158), 209–212, [link](http://www.jstor.org/stable/2276774).
 
 ## License 
 
