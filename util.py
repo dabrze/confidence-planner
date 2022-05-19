@@ -106,12 +106,13 @@ def sample_size_callback(interval_radius, confidence_level, task_method, n_split
     if n_splits is None:
         return dcc.Markdown(
             f"The estimated number of samples needed to obtain a **{round(confidence_level*100, 0)}% confidence "
-            f"interval* with a **{interval_radius} radius** is: **{sample_size} samples.**"
+            f"interval** with a **{interval_radius} radius** is: **{sample_size} samples.**"
         )
     else:
         return dcc.Markdown(
-            f"The estimated number of samples needed to obtain a {round(confidence_level * 100, 0)}% confidence "
-            f"interval with a {interval_radius} radius is : {sample_size}."
+            f"The estimated number of samples needed to obtain a **{round(confidence_level * 100, 0)}% confidence "
+            f"interval** with a **{interval_radius} radius** when performing **{n_splits}-fold** cross-validation is: "
+            f"**{sample_size} samples**."
         )
 
 

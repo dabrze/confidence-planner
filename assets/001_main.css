@@ -22,6 +22,10 @@ h1.landing-header, h2.landing-header, h3.landing-header {
     text-align: center;
 }
 
+#home {
+    text-align: justify;
+}
+
 #hero h1 {
     margin: 0;
     font-size: 56px;
