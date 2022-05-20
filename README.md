@@ -12,6 +12,10 @@ cross-validation, and progressive validation experiments. For information on how
 read on or take a look at our demonstration video below. To experiment with different estimation procedures go to the 
 accompanying web application at https://confidence-planner.herokuapp.com/. 
 
+
+https://user-images.githubusercontent.com/11019531/169568537-eb7e978b-7fbb-4d3f-a582-b8e4abca1a45.mp4
+
+
 ## Installing confidence-planner
 
 To install confidence-planner, just execute:
