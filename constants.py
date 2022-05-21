@@ -47,7 +47,7 @@ descriptions_dict = {
 
     "ci_holdout_clopper_pearson": """
     The Clopper-Pearson method is the more conservative alternative to the Wilson method for estimating confidence
-    intervals od holdout test results. Use the controls below to experiment with different 
+    intervals of holdout test results. Use the controls below to experiment with different 
     settings. The method will return intervals for the specified confidence level, as well as 90%, 95%, and 99% 
     confidence intervals.""",
 
@@ -55,8 +55,7 @@ descriptions_dict = {
     The Langford method is a very conservative estimation based on the Hoeffding inequality. Along with the Wilson
     and Clopper-Pearson method it is suitable for accuracy estimates without any additional assumptions.
     Use the controls below to experiment with different settings. The method will return intervals for 
-    the specified confidence level, as well as 90%, 95%, and 99% confidence intervals. 
-    confidence intervals.""",
+    the specified confidence level, as well as 90%, 95%, and 99% confidence intervals.""",
 
     "ci_holdout_z_test": """
     This estimation procedure assumes the accuracies of the classifier are normally distributed around the mean. 
