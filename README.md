@@ -9,8 +9,7 @@
 The **confidence-planner** package provides implementations of estimation procedures for confidence intervals 
 around classification accuracy in Python. The package currently features approximations for holdout, bootstrap,
 cross-validation, and progressive validation experiments. For information on how to install and use the package, 
-read on or take a look at our demonstration video below. To experiment with different estimation procedures go to the 
-accompanying web application at https://confidence-planner.herokuapp.com/. 
+read on or take a look at our demonstration video below. For a web application using the estimation methods, go to the `dash` branch of this repository.
 
 
 https://user-images.githubusercontent.com/11019531/169568537-eb7e978b-7fbb-4d3f-a582-b8e4abca1a45.mp4
