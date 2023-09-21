@@ -94,6 +94,22 @@ Confidence-planner methods belong to the field of frequentist statistics.
 
 Confidence-planner is free and open-source software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 
+## Citing
+
+If you use confidence-planner as part of your workflow in a scientific publication, please consider citing the associated [paper](https://arxiv.org/abs/2301.05702):
+
+```
+@article{confidence_planner,
+  author       = {Antoni Klorek and Karol Roszak and Izabela Szczech and Dariusz Brzezinski},
+  title        = {confidence-planner: Easy-to-Use Prediction Confidence Estimation and Sample Size Planning},
+  year         = {2023},
+  eprint       = {arXiv:2301.05702},
+  doi          = {10.48550/arXiv.2301.05702}
+}
+```
+
+- [Klorek, A. *et al.* (2023) confidence-planner: Easy-to-Use Prediction Confidence Estimation and Sample Size Planning. DOI: 10.48550/arXiv.2301.05702.](https://arxiv.org/abs/2301.05702)
+
 ## Contact
 
 The best way to ask questions is via the [GitHub Discussions channel](https://github.com/dabrze/confidence-planner/discussions). 
